@@ -1,0 +1,23 @@
+[build-system]
+requires = ["setuptools >= 77.0.3"]
+build-backend = "setuptools.build_meta"
+
+[project]
+requires-python = ">=3.10"
+version = "1.0.0"
+name = "MLR"
+description = "A high-performance Multiple Linear Regression model implemented in C++ with a clean Python API via Pybind11 bindings"
+dependencies = [
+    "pandas >= 2.2.3",
+    "matplotlib == 3.10.3",
+    "pybind11 == 2.13.6"
+]
+readme = "README.md"
+license = "MIT"
+authors = [
+    {name = "Sidhant Raj Khati"}
+]
+keywords = ["Machine Learning", "Linear Regression", "Multiple Linear Regression", "C++", "Python"]
+
+[project.urls]
+Repository = "https://github.com/Sidhant-1299/MLR.git"
