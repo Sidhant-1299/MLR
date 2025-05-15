@@ -1,14 +1,11 @@
 #include <iostream>
 #include <Eigen/Dense>
+#include "include/mlr.hpp"
 
-int main()
+using Eigen::MatrixXd;
+using Eigen::VectorXd;
+
+void MLR::fit(const MatrixXd &X, const MatrixXd &Y)
 {
-    Eigen::Matrix<float, 3, 3> matrixA;
-    matrixA.setZero();
-    for (int i = 0; i < 3; i++)
-    {
-        matrixA(i, i) = i + 1;
-    }
-    std::cout << matrixA << std::endl;
-    return 0;
+    // B = (XTX)-1XY
 }
