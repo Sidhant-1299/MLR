@@ -10,7 +10,8 @@ description = "A high-performance Multiple Linear Regression model implemented i
 dependencies = [
     "pandas >= 2.2.3",
     "matplotlib == 3.10.3",
-    "pybind11 == 2.13.6"
+    "pybind11 == 2.13.6",
+    "jupyter == 1.1.1"
 ]
 readme = "README.md"
 license = "MIT"
