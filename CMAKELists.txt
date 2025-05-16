@@ -1,0 +1,26 @@
+cmake_minimum_required(VERSION 4.0.1)
+
+#cmake -DCMAKE_PREFIX_PATH="$(python -m pybind11 --cmakedir)" ..
+
+project(MLR)
+# Use C++20
+set(CMAKE_CXX_STANDARD 20)
+set(CMAKE_CXX_STANDARD_REQUIRED True)
+
+find_package(Python3 COMPONENTS Interpreter Development REQUIRED)
+
+set(pybind11_DIR "/Users/macbookpro/Desktop/MachineLearning/MLR/venv/lib/python3.12/site-packages/pybind11/share/cmake/pybind11")
+find_package(pybind11 REQUIRED)
+
+
+add_library(MLR MODULE src/mlr.cpp src/bindings.cpp)
+
+target_include_directories(MLR PRIVATE 
+    ${Python3_INCLUDE_DIRS}
+    ${PYBIND11_INCLUDE_DIR}
+    ${PROJECT_SOURCE_DIR}/include
+)
+
+target_link_libraries(MLR PRIVATE 
+    Python3::Python
+)
