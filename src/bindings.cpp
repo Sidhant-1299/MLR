@@ -7,11 +7,11 @@
 #include <pybind11/pybind11.h>
 // numpy ndarray to Eigen::matrix
 #include <pybind11/eigen.h>
-#include "include/mlr.hpp"
+#include "mlr.hpp"
 
 namespace py = pybind11;
 
-PYBIND11_MODULE(mlr, m)
+PYBIND11_MODULE(mlr_cpp, m)
 {
     m.doc() = "Fit the linear regression model using python bindings to C++";
     py::class_<MLR>(m, "MLR")

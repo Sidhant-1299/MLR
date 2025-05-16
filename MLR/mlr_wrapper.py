@@ -1,4 +1,6 @@
 import pandas as pd
+import mlr_cpp
+
 
 class MLRWrapper:
     """
@@ -13,17 +15,26 @@ class MLRWrapper:
         self.X = df.drop(columns=[target_col]).to_numpy() #DROP THE TARGET COLUMN
         self.predictors = [col for col in df.columns if col != target_col]
         self.target = target_col
+        self.fitted = False
+        self.model = mlr_cpp.MLR
 
     def fit(self):
         """
             Pass our C++ fit method
         """
-        pass
+        self.model.fit(self.X,self.Y)
+        self.fitted = True
 
-    def predict(self):
-        pass
+    def predict(self, x):
+        if not self.fitted:
+            assert ValueError("Model not fit yet")
+        if not isinstance(x, pd.DataFrame):
+            assert ValueError("Predictor is not a Pandas DataFrame")
+        #might have to change x shape if it is of shape (rows,)
+        return self.model.predict(x.to_numpy())
 
-    def summary(self):
+    def get_coefficients(self):
         """
             Get the summary of our model
         """
+        return self.model.coefficiants()

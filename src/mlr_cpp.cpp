@@ -1,6 +1,6 @@
 #include <iostream>
 #include <Eigen/Dense>
-#include "include/mlr.hpp"
+#include "mlr.hpp"
 
 using Eigen::MatrixXd;
 using Eigen::VectorXd;
