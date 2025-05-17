@@ -1,4 +1,4 @@
-import numpy
+import numpy as np
 import pandas as pd
 import mlr_cpp
 
@@ -8,19 +8,29 @@ class MLRWrapper:
         Wrapper for fit() using pandas dataframe
     """
     def __init__(self, df: pd.DataFrame, target_col: str):
+
         if not isinstance(df, pd.DataFrame):
             raise ValueError("Input df should be an instance of Pandas DataFrame")
         if not target_col in df.columns:
             raise ValueError("Target column not in dataframe")
         
+        if not self.isnumerical(df):
+            raise ValueError("DataFrame can contain only numerical data")
+        
         self.Y = df[[target_col]].to_numpy()
         self.X = df.drop(columns=[target_col]).to_numpy()
 
         self.predictors = [col for col in df.columns if col != target_col]
-        
+
         self.target = target_col
         self.fitted = False
         self.model = mlr_cpp.MLR()
+
+    @staticmethod
+    #checks if the data is numerical or not
+    def isnumerical(df: pd.DataFrame):
+        #returns False if there is at least one value that is not numerical
+        return all([pd.api.types.is_numeric_dtype(df[col]) for col in df.columns])
 
     def fit(self):
         """

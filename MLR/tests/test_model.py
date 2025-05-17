@@ -137,11 +137,10 @@ def test_fit_with_wrong_target_type():
     })
 
     # Expect ValueError or TypeError depending on your C++ backend handling
-    model = MLRWrapper(df, target_col="y")
-    with pytest.raises((ValueError, TypeError)):
-        model.fit()
+    with pytest.raises(ValueError, match="DataFrame can contain only numerical data"):
+        MLRWrapper(df, target_col="y")
     
-    
+
 
 def test_fit_and_predict_large_dataset():
     np.random.seed(0)
