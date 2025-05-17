@@ -9,4 +9,3 @@ echo "REMOVING build\n"
 rm MLR/mlr_cpp.cpython-312-darwin.so
 echo "ADDING NEW BUILD\n"
 cp build/lib.macosx-10.13-universal2-cpython-312/mlr_cpp.cpython-312-darwin.so MLR/
-python3 MLR/test.py

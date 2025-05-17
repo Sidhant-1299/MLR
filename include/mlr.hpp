@@ -7,6 +7,7 @@ private:
     Eigen::MatrixXd coeffs;
 
 public:
+    bool test_collinearity(const Eigen::MatrixXd &);
     void fit(const Eigen::MatrixXd &, const Eigen::MatrixXd &);
     Eigen::MatrixXd predict(const Eigen::MatrixXd &) const;
     Eigen::MatrixXd coefficients() const;

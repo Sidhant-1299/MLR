@@ -17,8 +17,11 @@ class MLRWrapper:
         if not self.isnumerical(df):
             raise ValueError("DataFrame can contain only numerical data")
         
+        self.model = mlr_cpp.MLR()
+
         self.Y = df[[target_col]].to_numpy()
         self.X = df.drop(columns=[target_col]).to_numpy()
+
 
         self.predictors = [col for col in df.columns if col != target_col]
 
@@ -49,6 +52,7 @@ class MLRWrapper:
             raise ValueError("Data has different num of parameters than model parameters")
         
         return self.model.predict(x.to_numpy())
+    
 
     def get_coefficients(self):
         """
