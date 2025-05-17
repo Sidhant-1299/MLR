@@ -147,11 +147,9 @@ def test_prediction_accuracy_on_linear_data():
 
 #     # Predict using the training data
     predictions = model.predict(df[["x1", "x2"]]).reshape(-1,1)
-    print(f"Precitions shape: {predictions.shape}")
     y = y.reshape(-1,1)
-    print(f"Y shape {y.shape}")
     # Check if predictions are close to actual y
-    np.testing.assert_allclose(predictions, y, rtol=1e-4, atol=1e-4)
+    np.testing.assert_allclose(predictions, y, atol=1e-4)
 
 
 def test_multicolliner_data():
