@@ -74,7 +74,7 @@ def test_predict_shape_is_1d_array(sample_data):
 def test_prediction_accuracy_on_linear_data():
     # Create a DataFrame with known linear relationship: y = 2*x1 + 3*x2 + 5
     np.random.seed(0)
-    x1 = np.array([1,3,5])
+    x1 = np.array([1,4,5])
     x2 = np.array([0,4,6])
     y = 1 * x1 + 2 * x2 + 5
 

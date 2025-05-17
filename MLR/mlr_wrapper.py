@@ -1,3 +1,4 @@
+import numpy
 import pandas as pd
 import mlr_cpp
 
@@ -11,12 +12,12 @@ class MLRWrapper:
             raise ValueError("Input df should be an instance of Pandas DataFrame")
         if not target_col in df.columns:
             raise ValueError("Target column not in dataframe")
-        self.Y = df[target_col].to_numpy().reshape(-1,1) #figures out the rows and (-1) and it's length is one
-        self.X = df.drop(columns=[target_col]).to_numpy() #DROP THE TARGET COLUMN
+        self.Y = df[[target_col]].to_numpy(dtype=numpy.float64)
+        self.X = df.drop(columns=[target_col]).to_numpy(dtype=numpy.float64) #DROP THE TARGET COLUMN
         self.predictors = [col for col in df.columns if col != target_col]
         self.target = target_col
         self.fitted = False
-        self.model = mlr_cpp.MLR
+        self.model = mlr_cpp.MLR()
 
     def fit(self):
         """
@@ -37,4 +38,4 @@ class MLRWrapper:
         """
             Get the summary of our model
         """
-        return self.model.coefficiants()
+        return self.model.coefficients()
