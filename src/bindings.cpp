@@ -2,7 +2,6 @@
 //  This file uses Pybind11 to tell Python:
 //  "Here's a class called MLR"
 //  "It has a method called fit() that takes a matrix and a vector"
-//  "It returns something Python can understand (e.g., a list)"
 
 #include <pybind11/pybind11.h>
 // numpy ndarray to Eigen::matrix
@@ -14,6 +13,8 @@ namespace py = pybind11;
 PYBIND11_MODULE(mlr_cpp, m)
 {
     m.doc() = "Fit the linear regression model using python bindings to C++";
+    // <MLR> is our class in cpp
+    // "MLR" is our class in python
     py::class_<MLR>(m, "MLR")
         .def(py::init<>())
         .def("is_collinear", &MLR::is_collinear, py::arg("X"), "Test for collinear data in X data")

@@ -47,7 +47,7 @@ def test_fit_with_non_dataframe():
 
 
 def test_predict_with_non_dataframe(sample_data):
-    # sample_data should be a fixture that returns a valid DataFrame with target_col
+    # sample_data is a fixture that returns a valid DataFrame with target_col
     model = MLRWrapper(sample_data, target_col="y")
     model.fit()
     
@@ -70,7 +70,6 @@ def test_predict_shape_is_1d_array(sample_data):
 
     # Check prediction is returned as an array-like and has shape (1,) or (1, 1)
     assert prediction is not None
-    assert hasattr(prediction, 'shape')
     assert prediction.shape[0] == 1
 
 
@@ -86,7 +85,7 @@ def test_predict_with_wrong_shape():
     model = MLRWrapper(df, target_col="y")
     model.fit()
 
-    # Now test predict with wrong number of features (e.g., only 1 column instead of 2)
+    #test predict with wrong number of features (e.g., only 1 column instead of 2)
     wrong_input = pd.DataFrame({
         "x1": [10, 11, 12]  # Missing x2
     })
@@ -104,7 +103,6 @@ def test_fit_with_wrong_target_type():
         "y": ["a", "b", "c"]  # Invalid target (strings instead of numbers)
     })
 
-    # Expect ValueError or TypeError depending on your C++ backend handling
     with pytest.raises(ValueError, match="DataFrame can contain only numerical data"):
         MLRWrapper(df, target_col="y")
     
