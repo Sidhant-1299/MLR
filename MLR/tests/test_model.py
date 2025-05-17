@@ -29,13 +29,15 @@ def MLR_testData():
         'feature2': [2, 3, 4, 5],})
     return X
 
+def test_predict_before_fit_raises(MLR_instance, MLR_testData):
+    with pytest.raises(ValueError, match="Model not fit yet"):
+        MLR_instance.predict(MLR_testData)
+
 def test_fit_success(MLR_instance):
     MLR_instance.fit()
     assert MLR_instance.fitted
 
-def test_predict_before_fit_raises(MLR_instance, MLR_testData):
-    with pytest.raises(ValueError, match="Model not fit yet"):
-        MLR_instance.predict(MLR_testData)
+
 
 def test_fit_with_non_dataframe():
     # Pass a list instead of a DataFrame
@@ -121,7 +123,7 @@ def test_predict_with_wrong_shape():
         "x1": [10, 11, 12]  # Missing x2
     })
 
-    with pytest.raises((ValueError, RuntimeError)):
+    with pytest.raises(ValueError, match="Data has different num of parameters than model parameters"):
         model.predict(wrong_input)
 
 
@@ -138,6 +140,8 @@ def test_fit_with_wrong_target_type():
     model = MLRWrapper(df, target_col="y")
     with pytest.raises((ValueError, TypeError)):
         model.fit()
+    
+    
 
 def test_fit_and_predict_large_dataset():
     np.random.seed(0)

@@ -12,9 +12,12 @@ class MLRWrapper:
             raise ValueError("Input df should be an instance of Pandas DataFrame")
         if not target_col in df.columns:
             raise ValueError("Target column not in dataframe")
-        self.Y = df[[target_col]].to_numpy(dtype=numpy.float64)
-        self.X = df.drop(columns=[target_col]).to_numpy(dtype=numpy.float64) #DROP THE TARGET COLUMN
+        
+        self.Y = df[[target_col]].to_numpy()
+        self.X = df.drop(columns=[target_col]).to_numpy()
+
         self.predictors = [col for col in df.columns if col != target_col]
+        
         self.target = target_col
         self.fitted = False
         self.model = mlr_cpp.MLR()
@@ -28,10 +31,13 @@ class MLRWrapper:
 
     def predict(self, x):
         if not self.fitted:
-            assert ValueError("Model not fit yet")
+            raise ValueError("Model not fit yet")
         if not isinstance(x, pd.DataFrame):
-            assert ValueError("Predictor is not a Pandas DataFrame")
-        #might have to change x shape if it is of shape (rows,)
+            raise ValueError("Predictor is not a Pandas DataFrame")
+        
+        if x.shape[1] != self.X.shape[1]: #check if the data has the same number of columns as the data
+            raise ValueError("Data has different num of parameters than model parameters")
+        
         return self.model.predict(x.to_numpy())
 
     def get_coefficients(self):
