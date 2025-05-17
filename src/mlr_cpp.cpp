@@ -5,7 +5,7 @@
 using Eigen::FullPivLU;
 using Eigen::MatrixXd;
 
-bool MLR::test_collinearity(const MatrixXd &X)
+bool MLR::is_collinear(const MatrixXd &X)
 {
     MatrixXd X_aug(X.rows(), X.cols() + 1);
     X_aug << MatrixXd::Ones(X.rows(), 1), X;

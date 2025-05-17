@@ -22,12 +22,14 @@ class MLRWrapper:
         self.Y = df[[target_col]].to_numpy()
         self.X = df.drop(columns=[target_col]).to_numpy()
 
+        #check if X is multicollinear
+        if not self.model.is_collinear(self.X):
+            raise ValueError("Linear Regression Model not collinear")
 
         self.predictors = [col for col in df.columns if col != target_col]
 
         self.target = target_col
         self.fitted = False
-        self.model = mlr_cpp.MLR()
 
     @staticmethod
     #checks if the data is numerical or not
