@@ -1,5 +1,5 @@
 import pandas as pd
-import mlr_cpp
+from MLR.core import mlr_cpp
 import numpy as np
 
 class MLRWrapper:
