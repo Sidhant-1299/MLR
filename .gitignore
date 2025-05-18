@@ -178,3 +178,5 @@ cython_debug/
 *.dSYM/
 
 script.sh
+
+CMAKELists.txt
