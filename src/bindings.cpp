@@ -21,5 +21,8 @@ PYBIND11_MODULE(mlr_cpp, m)
         .def("fit", &MLR::fit, "Fit the model")                                 // py:arg allows for keyword argument in python
         .def("predict", &MLR::predict, py::arg("X"), "Predict target variable") // The string is returned using help(predict)
         .def("getCoefficients", &MLR::getCoefficients, "Get the model coeff")
-        .def("getResiduals", &MLR::getResiduals, "Get model residuals");
+        .def("getResiduals", &MLR::getResiduals, "Get model residuals")
+        .def("getRSS", &MLR::getRSS, "Get the residual sum of squares")
+        .def("getTSS", &MLR::getTSS, "Get the total sum of squares")
+        .def("getR2", &MLR::getR2, "Get R squared of the model");
 }

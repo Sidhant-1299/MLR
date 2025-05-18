@@ -56,7 +56,27 @@ MatrixXd MLR::getCoefficients() const
     return coeffs;
 }
 
-Eigen::MatrixXd MLR::getResiduals() const
+MatrixXd MLR::getResiduals() const
 {
     return Y - X_aug * coeffs;
+}
+
+double MLR::getRSS() const
+{
+    // returns the residual sum of squares
+    MatrixXd e = getResiduals();
+    return (e.transpose() * e)(0, 0); // extract the scalar value from the 1x1 matrix
+}
+
+double MLR::getTSS() const
+{
+    MatrixXd y_bar = MatrixXd::Constant(Y.rows(), 1, Y.mean()); // Y is a nx1 matrix where n is the number of observation
+    return ((Y - y_bar).transpose() * (Y - y_bar))(0, 0);
+}
+
+double MLR::getR2() const
+{
+    double RSS = getRSS();
+    double TSS = getTSS();
+    return 1 - (RSS / TSS);
 }

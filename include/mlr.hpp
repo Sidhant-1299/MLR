@@ -16,4 +16,7 @@ public:
     Eigen::MatrixXd predict(const Eigen::MatrixXd &) const;
     Eigen::MatrixXd getCoefficients() const;
     Eigen::MatrixXd getResiduals() const;
+    double getRSS() const;
+    double getTSS() const;
+    double getR2() const;
 };

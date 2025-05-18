@@ -33,6 +33,19 @@ class MLRWrapper:
             raise ValueError("Regression Data is collinear")
         self.fitted = False
 
+
+    def model_is_fit(self):
+        return self.fitted
+    
+    #Decorator to check if the model is fit or not
+    def requires_fit(method):
+        def wrapper(self, *args, **kwargs):
+            if not self.model_is_fit():
+                raise ValueError("Model not fit yet")
+            return method(self,*args, **kwargs)
+        return wrapper
+
+
     @staticmethod
     #checks if the data is numerical or not
     def isnumerical(df: pd.DataFrame) -> bool:
@@ -46,9 +59,8 @@ class MLRWrapper:
         self.model.fit()
         self.fitted = True
 
+    @requires_fit
     def predict(self, x:pd.DataFrame) -> np.ndarray:
-        if not self.fitted:
-            raise ValueError("Model not fit yet")
         if not isinstance(x, pd.DataFrame):
             raise ValueError("Predictor is not a Pandas DataFrame")
         
@@ -58,12 +70,11 @@ class MLRWrapper:
         return self.model.predict(x.to_numpy())
     
 
+    @requires_fit
     def get_coefficients(self) -> np.ndarray:
         """
             Get the summary of our model
         """
-        if not self.fitted:
-            raise ValueError("Model not fit yet")
         return self.model.getCoefficients()
     
     @staticmethod 
@@ -88,6 +99,18 @@ class MLRWrapper:
         eqn = f"{self.target} = {coeffs[0,0]} + {''.join([f"{coeff} * {predictor} {'+' if coeff != coeffs[-1,0] else ''}" for (coeff,predictor) in zip(coeffs[1:,0], self.predictors)])}"
         return eqn
     
-    def get_summary(self):
-        eqn = self.get_eqn()
-        pass
+    @requires_fit
+    def get_residuals(self) -> np.ndarray:
+        return self.model.getResiduals()
+    
+    @requires_fit
+    def get_RSS(self) -> np.float64:
+        return self.model.getRSS()
+    
+    @requires_fit
+    def get_TSS(self) -> np.float64:
+        return self.model.getTSS()
+    
+    @requires_fit
+    def get_Rsquared(self) -> np.float64:
+        return self.model.getR2()

@@ -178,5 +178,6 @@ def test_get_coefficients_matches_expected():
     model.fit()
     coeffs = model.get_coefficients()
     predicted_output = np.array([2,3,4]).reshape(-1,1)
-
     assert np.allclose(coeffs,predicted_output,atol=1e-4)
+
+
