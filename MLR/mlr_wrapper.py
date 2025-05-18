@@ -1,6 +1,6 @@
 import pandas as pd
 import mlr_cpp
-
+import numpy as np
 
 class MLRWrapper:
     """
@@ -21,6 +21,7 @@ class MLRWrapper:
         self.Y = df[[target_col]].to_numpy()
         self.X = df.drop(columns=[target_col]).to_numpy()
 
+
         #check if X is multicollinear
         if not self.model.is_collinear(self.X):
             raise ValueError("Linear Regression Model not collinear")
@@ -28,22 +29,23 @@ class MLRWrapper:
         self.predictors = [col for col in df.columns if col != target_col]
 
         self.target = target_col
+        self.predictors = [col for col in df.columns if col != target_col]
         self.fitted = False
 
     @staticmethod
     #checks if the data is numerical or not
-    def isnumerical(df: pd.DataFrame):
+    def isnumerical(df: pd.DataFrame) -> bool:
         #returns False if there is at least one value that is not numerical
         return all([pd.api.types.is_numeric_dtype(df[col]) for col in df.columns])
 
-    def fit(self):
+    def fit(self) -> None:
         """
             Pass our C++ fit method
         """
         self.model.fit(self.X,self.Y)
         self.fitted = True
 
-    def predict(self, x):
+    def predict(self, x:np.ndarray) -> np.ndarray:
         if not self.fitted:
             raise ValueError("Model not fit yet")
         if not isinstance(x, pd.DataFrame):
@@ -55,8 +57,36 @@ class MLRWrapper:
         return self.model.predict(x.to_numpy())
     
 
-    def get_coefficients(self):
+    def get_coefficients(self) -> np.ndarray:
         """
             Get the summary of our model
         """
+        if not self.fitted:
+            raise ValueError("Model not fit yet")
         return self.model.coefficients()
+    
+    @staticmethod 
+    def get_rounded_with_tolerance_coeffs(coeffs: np.ndarray, atol: int, decimals: int)-> np.ndarray:
+        """
+            rounds the value of the coeffs to their nearest two digit if it is close to the absolute tolerance
+        """
+        rounded_coeffs = np.round(coeffs, decimals)
+        is_close = np.isclose(coeffs, rounded_coeffs, atol=atol)
+        #returns rounded coeffs if the value is close else the original coeffs
+        return np.where(is_close, rounded_coeffs, coeffs)
+        
+
+    def get_eqn(self, rounded:bool = True, atol:int = 1e-8, decimals:int = 2 ) -> str:
+        """
+            returns the evaluation and summary of the model
+            does round up the value with absolute tolerance 1e-8
+        """
+        coeffs = self.get_coefficients().reshape(-1,1)
+        if rounded:
+            coeffs = self.get_rounded_with_tolerance_coeffs(coeffs=coeffs, atol = atol, decimals= decimals)
+        eqn = f"{self.target} = {coeffs[0,0]} + {''.join([f"{coeff} * {predictor} {'+' if coeff != coeffs[-1,0] else ''}" for (coeff,predictor) in zip(coeffs[1:,0], self.predictors)])}"
+        return eqn
+    
+    def get_summary(self):
+        eqn = self.get_eqn()
+        pass

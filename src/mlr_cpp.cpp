@@ -16,7 +16,7 @@ bool MLR::is_collinear(const MatrixXd &X)
     MatrixXd X_aug(X.rows(), X.cols() + 1);
     X_aug << MatrixXd::Ones(X.rows(), 1), X;
     FullPivLU<MatrixXd> lu_decomposed_Xaug(X_aug);
-    std::cout << X_aug << std::endl;
+    // std::cout << X_aug << std::endl;
     return (lu_decomposed_Xaug.rank() == X_aug.cols());
 }
 
@@ -38,7 +38,7 @@ void MLR::fit(const MatrixXd &X, const MatrixXd &Y)
     // XTXb = XTY
 
     coeffs = (X_aug.transpose() * X_aug).ldlt().solve(X_aug.transpose() * Y);
-    std::cout << "coeffs: " << coeffs << std::endl;
+    // std::cout << "coeffs: " << coeffs << std::endl;
 }
 
 MatrixXd MLR::predict(const MatrixXd &X) const
