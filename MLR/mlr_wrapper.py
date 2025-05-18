@@ -16,20 +16,21 @@ class MLRWrapper:
         if not self.isnumerical(df):
             raise ValueError("DataFrame can contain only numerical data")
         
-        self.model = mlr_cpp.MLR()
 
         self.Y = df[[target_col]].to_numpy()
         self.X = df.drop(columns=[target_col]).to_numpy()
 
 
         #check if X is multicollinear
-        if not self.model.is_collinear(self.X):
-            raise ValueError("Linear Regression Model not collinear")
 
         self.predictors = [col for col in df.columns if col != target_col]
 
         self.target = target_col
-        self.predictors = [col for col in df.columns if col != target_col]
+
+        self.model = mlr_cpp.MLR(self.X, self.Y)
+
+        if self.model.isCollinear():
+            raise ValueError("Regression Data is collinear")
         self.fitted = False
 
     @staticmethod
@@ -42,10 +43,10 @@ class MLRWrapper:
         """
             Pass our C++ fit method
         """
-        self.model.fit(self.X,self.Y)
+        self.model.fit()
         self.fitted = True
 
-    def predict(self, x:np.ndarray) -> np.ndarray:
+    def predict(self, x:pd.DataFrame) -> np.ndarray:
         if not self.fitted:
             raise ValueError("Model not fit yet")
         if not isinstance(x, pd.DataFrame):
@@ -63,7 +64,7 @@ class MLRWrapper:
         """
         if not self.fitted:
             raise ValueError("Model not fit yet")
-        return self.model.coefficients()
+        return self.model.getCoefficients()
     
     @staticmethod 
     def get_rounded_with_tolerance_coeffs(coeffs: np.ndarray, atol: int, decimals: int)-> np.ndarray:

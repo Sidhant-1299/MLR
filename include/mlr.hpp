@@ -5,10 +5,15 @@ class MLR
 {
 private:
     Eigen::MatrixXd coeffs;
+    Eigen::MatrixXd X;
+    Eigen::MatrixXd Y;
+    Eigen::MatrixXd X_aug;
 
 public:
-    bool is_collinear(const Eigen::MatrixXd &);
-    void fit(const Eigen::MatrixXd &, const Eigen::MatrixXd &);
+    MLR(const Eigen::MatrixXd &, const Eigen::MatrixXd &);
+    bool isCollinear();
+    void fit();
     Eigen::MatrixXd predict(const Eigen::MatrixXd &) const;
-    Eigen::MatrixXd coefficients() const;
+    Eigen::MatrixXd getCoefficients() const;
+    Eigen::MatrixXd getResiduals() const;
 };

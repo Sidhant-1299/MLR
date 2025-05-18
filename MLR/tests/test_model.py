@@ -70,7 +70,8 @@ def test_predict_shape_is_1d_array(sample_data):
 
     # Check prediction is returned as an array-like and has shape (1,) or (1, 1)
     assert prediction is not None
-    assert prediction.shape[0] == 1
+    assert prediction.shape in [(1,), (1, 1)]
+
 
 
 def test_predict_with_wrong_shape():
@@ -159,7 +160,7 @@ def test_multicolliner_data():
     y = 2 + 3 * df["x1"] + 4 * df["x2"]
     df["y"] = y
 
-    with pytest.raises(ValueError, match="Linear Regression Model not collinear"):
+    with pytest.raises(ValueError, match="Regression Data is collinear"):
         model = MLRWrapper(df, target_col="y")
 
 
