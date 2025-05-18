@@ -24,5 +24,8 @@ PYBIND11_MODULE(mlr_cpp, m)
         .def("getResiduals", &MLR::getResiduals, "Get model residuals")
         .def("getRSS", &MLR::getRSS, "Get the residual sum of squares")
         .def("getTSS", &MLR::getTSS, "Get the total sum of squares")
-        .def("getR2", &MLR::getR2, "Get R squared of the model");
+        .def("getR2", &MLR::getR2, "Get R squared of the model")
+        .def("getAdjustedR2", &MLR::getAdjustedR2, "Get Adjusted R2 of the model")
+        .def("getMAE", &MLR::getMAE, "Get Mean absolute error")
+        .def("getMSE", &MLR::getMSE, "Get Mean Squared Error");
 }

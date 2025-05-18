@@ -80,3 +80,25 @@ double MLR::getR2() const
     double TSS = getTSS();
     return 1 - (RSS / TSS);
 }
+
+double MLR::getAdjustedR2() const
+{
+    int n = X_aug.rows();     // observations
+    int p = X_aug.cols() - 1; // exclude intercept
+    double r2 = getR2();
+    return 1 - (1 - r2) * ((n - 1.0) / (n - p - 1.0));
+}
+
+double MLR::getMSE() const
+{
+    double rss = getRSS();
+    int n = X_aug.rows();
+    int p = X_aug.cols(); // includes intercept
+    return rss / (n - p);
+}
+
+double MLR::getMAE() const
+{
+    MatrixXd residuals = getResiduals();
+    return residuals.cwiseAbs().mean();
+}

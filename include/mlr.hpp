@@ -19,4 +19,7 @@ public:
     double getRSS() const;
     double getTSS() const;
     double getR2() const;
+    double getAdjustedR2() const;
+    double getMSE() const;
+    double getMAE() const;
 };

@@ -1,7 +1,7 @@
 from setuptools import setup, Extension
 import pybind11
 from setuptools.command.build_ext import build_ext
-import os
+
 
 ext_modules = [
     Extension(
