@@ -28,6 +28,16 @@ def MLR_testData():
         'feature2': [2, 3, -1, 5],})
     return X
 
+@pytest.fixture
+def square_data():
+    #returns a square matrix
+    #statistically meaningless because it overfits the data
+    return pd.DataFrame({
+        "x1": [1, 2, 3,],
+        "x2": [5, 6, 0,],
+        "y": [12, 15, 4,] #x1 + 2*x2 + 1
+    })
+
 def test_predict_before_fit_raises(MLR_instance, MLR_testData):
     with pytest.raises(ValueError, match="Model not fit yet"):
         MLR_instance.predict(MLR_testData)
@@ -77,9 +87,9 @@ def test_predict_shape_is_1d_array(sample_data):
 def test_predict_with_wrong_shape():
     # Sample training data
     df = pd.DataFrame({
-        "x1": [1, 2, 3],
-        "x2": [4, 1, 6],
-        "y": [9, 4, 15] #x1 + 2*x2
+        "x1": [1, 2, 3, 0],
+        "x2": [4, 1, 6, 1],
+        "y": [9, 4, 15, 2] #x1 + 2*x2
     })
 
     # Train the model
@@ -88,7 +98,7 @@ def test_predict_with_wrong_shape():
 
     #test predict with wrong number of features (e.g., only 1 column instead of 2)
     wrong_input = pd.DataFrame({
-        "x1": [10, 11, 12]  # Missing x2
+        "x1": [10, 11, 12, 9]  # Missing x2
     })
 
     with pytest.raises(ValueError, match="Data has different num of parameters than model parameters"):
@@ -131,8 +141,8 @@ def test_fit_and_predict_large_dataset():
 def test_prediction_accuracy_on_linear_data():
     # Create a DataFrame with known linear relationship: y = 2*x1 + 3*x2 + 5
     np.random.seed(0)
-    x1 = np.array([1,4,5])
-    x2 = np.array([0,4,6])
+    x1 = np.array([1,4,5, 9])
+    x2 = np.array([0,4,6,-2])
     y = 1 * x1 + 2 * x2 + 5
 
     df = pd.DataFrame({
@@ -181,3 +191,6 @@ def test_get_coefficients_matches_expected():
     assert np.allclose(coeffs,predicted_output,atol=1e-4)
 
 
+def test_sufficient_data(square_data):
+    with pytest.raises(ValueError, match="Insufficient Data for meaningful model"):
+        model = MLRWrapper(square_data, target_col='y')

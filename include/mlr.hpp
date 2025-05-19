@@ -11,6 +11,7 @@ private:
 
 public:
     MLR(const Eigen::MatrixXd &, const Eigen::MatrixXd &);
+    bool hasSufficientData() const;
     bool isCollinear();
     void fit();
     Eigen::MatrixXd predict(const Eigen::MatrixXd &) const;
@@ -22,4 +23,5 @@ public:
     double getAdjustedR2() const;
     double getMSE() const;
     double getMAE() const;
+    double Ftest() const;
 };

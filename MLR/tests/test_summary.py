@@ -14,11 +14,23 @@ def sample_data():
 
 @pytest.fixture
 def sample_data_2():
-    x1 = np.array([1,2,3,4])
-    x2 = np.array([3,4,1,2])
-    x3 = np.array([2,3,5,7])
+    x1 = np.array([1,2,3,4, 5])
+    x2 = np.array([3,4,1,2,-1])
+    x3 = np.array([2,3,5,7,4])
     y = 1 + x1 + 2*x2 + 0.0021*x3
     return pd.DataFrame({'x1':x1, 'x2':x2, "x3":x3, 'y':y})
+
+
+@pytest.fixture
+def noisy_data():
+    np.random.seed(42)
+    x1 = np.random.rand(100)
+    x2 = np.random.rand(100)
+    # y = 3 + 2*x1 - x2 + some noise
+    noise = np.random.normal(0, 0.5, size=100)
+    y = 3 + 2 * x1 - 1 * x2 + noise
+    return pd.DataFrame({'x1': x1, 'x2': x2, 'y': y})
+
 
 def test_equation_returns_str(sample_data):
     model = MLRWrapper(sample_data, 'y')
@@ -79,7 +91,7 @@ def test_get_RSS_and_TSS_before_fit_raises(sample_data):
 def test_r_squared_raises_before_fit(sample_data):
     model = MLRWrapper(sample_data, target_col="y")
     with pytest.raises(ValueError, match="Model not fit yet"):
-        model.get_Rsquared()
+        model.get_R2()
 
 
 
@@ -87,8 +99,57 @@ def test_r_squared_raises_before_fit(sample_data):
 def test_r_squared(sample_data):
     model = MLRWrapper(sample_data, target_col="y")
     model.fit()
-    r2 = model.get_Rsquared()
+    r2 = model.get_R2()
     # print(r2)
     # In this case, data is perfectly linear => R^2 should be ~1.0
     assert isinstance(r2, float) or isinstance(r2, np.float64)
     assert np.isclose(r2, 1.0, atol=1e-10)
+
+
+def test_adjusted_r_squared(sample_data):
+    model = MLRWrapper(sample_data, "y")
+    model.fit()
+    adj_r2 = model.get_AdjustedR2()
+    assert isinstance(adj_r2, (float, np.float64))
+    # Should also be very close to 1.0 for perfect linear data
+    assert np.isclose(adj_r2, 1.0, atol=1e-10)
+
+
+def test_mse_on_perfect_fit(sample_data):
+    model = MLRWrapper(sample_data, "y")
+    model.fit()
+    mse = model.get_MSE()
+    assert isinstance(mse, (float, np.float64))
+    assert np.isclose(mse, 0.0, atol=1e-10)
+
+
+def test_mae_on_perfect_fit(sample_data):
+    model = MLRWrapper(sample_data, "y")
+    model.fit()
+    mae = model.get_MAE()
+    assert isinstance(mae, (float, np.float64))
+    assert np.isclose(mae, 0.0, atol=1e-10)
+
+
+def test_adjusted_r_squared_on_noisy_data(noisy_data):
+    model = MLRWrapper(noisy_data, 'y')
+    model.fit()
+    adj_r2 = model.get_AdjustedR2()
+    assert isinstance(adj_r2, (float, np.float64))
+    assert 0.0 < adj_r2 < 1.0  # Should be reasonable but not perfect
+
+
+def test_mse_on_noisy_data(noisy_data):
+    model = MLRWrapper(noisy_data, "y")
+    model.fit()
+    mse = model.get_MSE()
+    assert isinstance(mse, (float, np.float64))
+    assert mse > 0  # Not zero due to noise
+
+
+def test_mae_on_noisy_data(noisy_data):
+    model = MLRWrapper(noisy_data, "y")
+    model.fit()
+    mae = model.get_MAE()
+    assert isinstance(mae, (float, np.float64))
+    assert mae > 0  # Not zero due to noise

@@ -18,6 +18,7 @@ PYBIND11_MODULE(mlr_cpp, m)
     py::class_<MLR>(m, "MLR")
         .def(py::init<const Eigen::MatrixXd &, const Eigen::MatrixXd &>())
         .def("isCollinear", &MLR::isCollinear, "Test for collinear data in X data")
+        .def("hasSufficentData", &MLR::hasSufficientData, "Check if the model has sufficient data")
         .def("fit", &MLR::fit, "Fit the model")                                 // py:arg allows for keyword argument in python
         .def("predict", &MLR::predict, py::arg("X"), "Predict target variable") // The string is returned using help(predict)
         .def("getCoefficients", &MLR::getCoefficients, "Get the model coeff")
@@ -27,5 +28,6 @@ PYBIND11_MODULE(mlr_cpp, m)
         .def("getR2", &MLR::getR2, "Get R squared of the model")
         .def("getAdjustedR2", &MLR::getAdjustedR2, "Get Adjusted R2 of the model")
         .def("getMAE", &MLR::getMAE, "Get Mean absolute error")
-        .def("getMSE", &MLR::getMSE, "Get Mean Squared Error");
+        .def("getMSE", &MLR::getMSE, "Get Mean Squared Error")
+        .def("Ftest", &MLR::Ftest, "FTest for model significance");
 }

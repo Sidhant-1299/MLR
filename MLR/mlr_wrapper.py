@@ -31,7 +31,19 @@ class MLRWrapper:
 
         if self.model.isCollinear():
             raise ValueError("Regression Data is collinear")
+        
+        if not self.model.hasSufficentData():
+            raise ValueError("Insufficient Data for meaningful model")
+        
         self.fitted = False
+
+
+    def fit(self) -> None:
+        """
+            Pass our C++ fit method
+        """
+        self.model.fit()
+        self.fitted = True
 
 
     def model_is_fit(self):
@@ -52,12 +64,6 @@ class MLRWrapper:
         #returns False if there is at least one value that is not numerical
         return all([pd.api.types.is_numeric_dtype(df[col]) for col in df.columns])
 
-    def fit(self) -> None:
-        """
-            Pass our C++ fit method
-        """
-        self.model.fit()
-        self.fitted = True
 
     @requires_fit
     def predict(self, x:pd.DataFrame) -> np.ndarray:
@@ -87,7 +93,7 @@ class MLRWrapper:
         #returns rounded coeffs if the value is close else the original coeffs
         return np.where(is_close, rounded_coeffs, coeffs)
         
-
+    @requires_fit
     def get_eqn(self, rounded:bool = True, atol:int = 1e-8, decimals:int = 2 ) -> str:
         """
             returns the evaluation and summary of the model
@@ -112,5 +118,18 @@ class MLRWrapper:
         return self.model.getTSS()
     
     @requires_fit
-    def get_Rsquared(self) -> np.float64:
+    def get_R2(self) -> np.float64:
         return self.model.getR2()
+    
+    @requires_fit
+    def get_AdjustedR2(self) -> np.float64:
+        return self.model.getAdjustedR2()
+    
+    @requires_fit
+    def get_MSE(self) -> np.float64:
+        return self.model.getMSE()
+    
+    @requires_fit
+    def get_MAE(self) -> np.float64:
+        return self.model.getMAE()
+    

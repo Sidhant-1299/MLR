@@ -11,6 +11,14 @@ MLR::MLR(const Eigen::MatrixXd &X, const Eigen::MatrixXd &Y) : X(X), Y(Y), X_aug
     X_aug << MatrixXd::Ones(X.rows(), 1), X;
 };
 
+bool MLR::hasSufficientData() const
+{
+    // results in divide by zero error for Ftest
+    // Also n == k+1 means that the training data is statistically meaningless
+    // overfits the data
+    return X_aug.rows() > X_aug.cols(); // i.e., n > k + 1
+}
+
 bool MLR::isCollinear()
 {
     // checks if the columns of the matrix are collinear
@@ -101,4 +109,13 @@ double MLR::getMAE() const
 {
     MatrixXd residuals = getResiduals();
     return residuals.cwiseAbs().mean();
+}
+
+double MLR::Ftest() const
+{
+    double RSS = getRSS();
+    double TSS = getTSS();
+    int k = X.cols(); // number of predictors
+    int n = X.rows(); // number of observations
+    return ((TSS - RSS) / k) / (RSS / (n - k - 1));
 }
