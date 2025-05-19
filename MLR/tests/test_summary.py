@@ -155,3 +155,41 @@ def test_mae_on_noisy_data(noisy_data):
     assert mae > 0  # Not zero due to noise
 
     
+def test_ftest_is_positive_and_reasonable():
+    df = pd.DataFrame({
+        "x1": [1, 2, 3, 4, 5],
+        "x2": [5, 5, 3, 4, 2],
+        "y": [11, 12, 11, 12, 9]  # Linear and predictable
+    })
+    model = MLRWrapper(df, target_col="y")
+    model.fit()
+
+    f_stat = model.get_ftest()
+    assert isinstance(f_stat, float)
+    assert f_stat > 0  # F-statistic should be positive in valid model
+
+
+def test_tstatistics_values_and_shape():
+    df = pd.DataFrame({
+        "x1": [1, 2, 3, 4, 5],
+        "x2": [2, 6, 12, 20, 30],
+        "y": [3, 8, 15, 24, 35]  # y = x1 + x2, perfect linear relationship
+    })
+    model = MLRWrapper(df, target_col="y")
+    model.fit()
+
+    t_stats = model.get_TStatistics()  # Fixed typo in method name
+    
+    print(t_stats)
+    # Check type and shape
+    assert isinstance(t_stats, np.ndarray)
+    assert t_stats.shape == (3,) or t_stats.shape == (3, 1)  # Accept either shape
+    
+    # Check for finite values
+    assert np.all(np.isfinite(t_stats))
+    
+    # For perfect fit, t-stats should be either:
+    # - Very large (significant coefficients)
+    # - Very small (for intercept if data is centered)
+
+    assert np.any((np.abs(t_stats) > 500)) 

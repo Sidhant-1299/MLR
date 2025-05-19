@@ -196,35 +196,3 @@ def test_sufficient_data(square_data):
         model = MLRWrapper(square_data, target_col='y')
 
     
-def test_ftest_is_positive_and_reasonable():
-    df = pd.DataFrame({
-        "x1": [1, 2, 3, 4, 5],
-        "x2": [5, 4, 3, 2, 1],
-        "y": [10, 9, 8, 7, 6]  # Linear and predictable
-    })
-    model = MLRWrapper(df, target_col="y")
-    model.fit()
-
-    f_stat = model.get_ftest()
-    assert isinstance(f_stat, float)
-    assert f_stat > 0  # F-statistic should be positive in valid model
-
-
-def test_tstatistics_values_and_shape():
-    df = pd.DataFrame({
-        "x1": [1, 2, 3, 4, 5],
-        "x2": [2, 3, 4, 5, 6],
-        "y": [5, 7, 9, 11, 13]  # y = x1 + x2 + 2, perfect linear relationship
-    })
-    model = MLRWrapper(df, target_col="y")
-    model.fit()
-
-    t_stats = model.get_TStatitics()
-
-    # Check type and shape
-    assert isinstance(t_stats, np.ndarray)
-    assert t_stats.shape == (3, 1)  # 2 features + intercept
-    assert np.all(np.isfinite(t_stats))  # No NaNs or infs
-
-    # Values should be large in absolute magnitude for perfect fit
-    assert np.all(np.abs(t_stats) > 5)

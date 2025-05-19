@@ -4,6 +4,7 @@
 
 using Eigen::FullPivLU;
 using Eigen::MatrixXd;
+using Eigen::VectorXd;
 
 MLR::MLR(const Eigen::MatrixXd &X, const Eigen::MatrixXd &Y) : X(X), Y(Y), X_aug(X.rows(), X.cols() + 1)
 {
@@ -43,7 +44,8 @@ void MLR::fit()
     // Fit: coeffs = (X^T X)^-1 X^T y
     // XTXb = XTY
 
-    coeffs = (X_aug.transpose() * X_aug).ldlt().solve(X_aug.transpose() * Y);
+    // coeffs = (X_aug.transpose() * X_aug).ldlt().solve(X_aug.transpose() * Y);
+    coeffs = X_aug.householderQr().solve(Y);
     // std::cout << "coeffs: " << coeffs << std::endl;
 }
 
@@ -120,10 +122,8 @@ double MLR::Ftest() const
     return ((TSS - RSS) / k) / (RSS / (n - k - 1));
 }
 
-MatrixXd MLR::getTStaistics() const
+VectorXd MLR::getTStatistics() const
 {
-    int n = X_aug.rows();
-    int p = X_aug.cols();
 
     double mse = getMSE();
 
@@ -132,11 +132,16 @@ MatrixXd MLR::getTStaistics() const
 
     // Standard errors = sqrt(MSE * diag(X^T X)^-1)
     // .diagonal() returns the values of the main diagonal
-    MatrixXd se = XTX_inv.diagonal(); // returns a vector of shape p x 1
+    VectorXd se = XTX_inv.diagonal(); // returns a vector of shape p x 1
     for (int i = 0; i < se.size(); ++i)
     {
         se(i) = std::sqrt(mse * se(i));
     }
-    MatrixXd t_stats = coeffs.array() / se.array();
+
+    // Compute t-statistics for each coefficient:
+    // t_i = B_i / SE(B_i)
+    // This measures how many standard errors the coefficient is away from 0.
+    // Used to test H0: B_i = 0 (null hypothesis).
+    VectorXd t_stats = coeffs.array() / se.array();
     return t_stats;
 }

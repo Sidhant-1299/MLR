@@ -93,6 +93,9 @@ class MLRWrapper:
         #returns rounded coeffs if the value is close else the original coeffs
         return np.where(is_close, rounded_coeffs, coeffs)
         
+    #TODO: correct the eqn string
+    #make sure of the + sign
+    #remove beta if value is close to 0.0
     @requires_fit
     def get_eqn(self, rounded:bool = True, atol:int = 1e-8, decimals:int = 2 ) -> str:
         """
@@ -138,5 +141,5 @@ class MLRWrapper:
         return self.model.Ftest()
     
     @requires_fit
-    def get_TStatitics(self) -> np.float64:
-        return self.model.getTStatistics()
+    def get_TStatistics(self) -> np.float64:
+        return self.model.getTStatistics().reshape(-1,1) #return shape (m,1)
