@@ -76,13 +76,14 @@ double MLR::getRSS() const
 {
     // returns the residual sum of squares
     MatrixXd e = getResiduals();
-    return (e.transpose() * e)(0, 0); // extract the scalar value from the 1x1 matrix
+    // return (e.transpose() * e)(0, 0); // extract the scalar value from the 1x1 matrix
+    return e.squaredNorm();
 }
 
 double MLR::getTSS() const
 {
     MatrixXd y_bar = MatrixXd::Constant(Y.rows(), 1, Y.mean()); // Y is a nx1 matrix where n is the number of observation
-    return ((Y - y_bar).transpose() * (Y - y_bar))(0, 0);
+    return (Y - y_bar).squaredNorm();
 }
 
 double MLR::getR2() const
@@ -162,7 +163,7 @@ VectorXd MLR::getPValues() const
     for (int i = 0; i < t_stats.size(); ++i)
     {
         double t = std::abs(t_stats(i));
-        double p_val = 2 * (1 - boost::math::cdf(dist, t)); // 1 - boost::math::cdf(dist, t)
+        double p_val = 2 * boost::math::cdf(boost::math::complement(dist, t)); // 1 - boost::math::cdf(dist, t)
         p_values(i) = p_val;
     }
 

@@ -25,4 +25,5 @@ public:
     double getMAE() const;
     double Ftest() const;
     Eigen::VectorXd getTStatistics() const;
+    Eigen::VectorXd getPValues() const;
 };

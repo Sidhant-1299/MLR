@@ -1,3 +1,4 @@
+import array
 from MLR.mlr_wrapper import MLRWrapper
 import pytest
 import pandas as pd
@@ -10,6 +11,35 @@ def sample_data():
         "x2": [5, 6, 0, 8],
         "y": [14, 17, 6, 23] #3 + x1 + 2*x2
     })
+
+@pytest.fixture
+def no_intercept_data():
+    return pd.DataFrame({
+        "x1": [1, 2, 3, 4],
+        "x2": [5, 6, 0, 8],
+        "y": [11, 14, 3, 20] # x1 + 2*x2
+    })
+
+@pytest.fixture
+def insignificant_regressor_data():
+    """
+    Generates a dataset with one theoretically significant regressor (x1) 
+    and one theoretically insignificant regressor (x2), but with extreme noise.
+
+    The true model is:
+        y = 3 + 2*x1 + 0.0001*x2 + noise
+
+    - x1 is designed to be significant (coefficient = 2)
+    - x2 is designed to be insignificant (coefficient ≈ 0)
+    - However, extreme noise is added to distort signal and simulate spurious significance
+    """
+    np.random.seed(42)
+    n = 100
+    x1 = np.random.rand(n)  # Significant regressor
+    x2 = np.random.rand(n)  # Insignificant regressor
+    noise = np.random.normal(0, 0.1, n)
+    y = 3 + 2*x1 + 0.0001*x2 + (noise * 100_000_000)  # Adds extreme noise to distort significance
+    return pd.DataFrame({'x1': x1, 'x2': x2, 'y': y})
 
 
 @pytest.fixture
@@ -180,7 +210,6 @@ def test_tstatistics_values_and_shape():
 
     t_stats = model.get_TStatistics()  # Fixed typo in method name
     
-    print(t_stats)
     # Check type and shape
     assert isinstance(t_stats, np.ndarray)
     assert t_stats.shape == (3,) or t_stats.shape == (3, 1)  # Accept either shape
@@ -193,3 +222,51 @@ def test_tstatistics_values_and_shape():
     # - Very small (for intercept if data is centered)
 
     assert np.any((np.abs(t_stats) > 500)) 
+
+def test_pvalues_on_perfect_fit(sample_data):
+    model = MLRWrapper(sample_data, 'y')
+    model.fit()
+    pvalues = model.get_PValues()
+    
+    assert isinstance(pvalues, np.ndarray)
+    assert pvalues.shape[0] == sample_data.shape[1]  # num of predictors + intercept
+    
+    # print(f"Coeff: {model.get_coefficients()}")
+    # print("P-Values:", pvalues)
+    # In a perfect linear fit, all relevant predictors should have small p-values
+    assert np.any(pvalues < 0.05)  # Some should be significant
+
+
+
+def test_pvalues_on_perfect_fit_no_intercept(no_intercept_data):
+    model = MLRWrapper(no_intercept_data, 'y')
+    model.fit()
+    pvalues = model.get_PValues()
+    
+    assert isinstance(pvalues, np.ndarray)
+    assert pvalues.shape[0] == no_intercept_data.shape[1]  # num of predictors + intercept
+    
+    # print(f"Coeff: {model.get_coefficients()}")
+    # print("P-Values:", pvalues)
+    # In a perfect linear fit, all relevant predictors should have small p-values
+    assert np.any(pvalues < 0.05)  # Some should be significant
+
+def test_pvalues_on_insignificant_regressor(insignificant_regressor_data):
+    model = MLRWrapper(insignificant_regressor_data, "y")
+    model.fit()
+    pvalues = model.get_PValues()
+
+    assert isinstance(pvalues, np.ndarray)
+    assert pvalues.shape[0] == insignificant_regressor_data.shape[1]  # predictors + intercept
+    
+    # print(f"Model ceoff: {model.get_coefficients()}")
+    # print(f"Tstatistics: {model.get_TStatistics()}")
+    # print(f"P-values: {pvalues}")
+    # x2 is insignificant; at least some might be > 0.05
+    assert np.any(pvalues > 0.05)
+
+
+def test_pvalues_before_fit_raises(sample_data):
+    model = MLRWrapper(sample_data, "y")
+    with pytest.raises(ValueError, match="Model not fit yet"):
+        model.get_PValues()

@@ -11,7 +11,8 @@ ext_modules = [
             pybind11.get_include(),                   # Pybind11 headers
             pybind11.get_include(user=True),         # For user install cases
             "/Users/macbookpro/Desktop/MachineLearning/MLR/include",  # Your own headers
-            "/Users/macbookpro/Desktop/MachineLearning/MLR/external/eigen-3.4.0",                              # Your own headers
+            "/Users/macbookpro/Desktop/MachineLearning/MLR/external/eigen-3.4.0",  
+            "/Users/macbookpro/Desktop/MachineLearning/MLR/external/boost_1_88_0",                              # Your own headers
         ],
         language='c++',
         extra_compile_args=['-std=c++23']

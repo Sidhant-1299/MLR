@@ -28,6 +28,19 @@ def MLR_testData():
         'feature2': [2, 3, -1, 5],})
     return X
 
+
+
+@pytest.fixture
+def noisy_data():
+    np.random.seed(42)
+    x1 = np.random.rand(100)
+    x2 = np.random.rand(100)
+    # y = 3 + 2*x1 - x2 + some noise
+    noise = np.random.normal(0, 0.5, size=100)
+    y = 3 + 2 * x1 - 1 * x2 + noise
+    return pd.DataFrame({'x1': x1, 'x2': x2, 'y': y})
+
+
 @pytest.fixture
 def square_data():
     #returns a square matrix
@@ -196,3 +209,50 @@ def test_sufficient_data(square_data):
         model = MLRWrapper(square_data, target_col='y')
 
     
+def test_pvalues_valid_output(sample_data):
+    model = MLRWrapper(sample_data, 'y')
+    model.fit()
+    pvalues = model.get_PValues()
+    
+    # Ensure output is a numpy array
+    assert isinstance(pvalues, np.ndarray)
+    
+    # Length should match number of predictors + intercept
+    assert pvalues.shape[0] == sample_data.shape[1]
+
+    # P-values should be between 0 and 1
+    assert np.all((0 <= pvalues) & (pvalues <= 1))
+
+
+def test_pvalues_on_perfect_fit(sample_data):
+    model = MLRWrapper(sample_data, 'y')
+    model.fit()
+    pvalues = model.get_PValues()
+    
+    # assert isinstance(pvalues, np.ndarray)
+    # assert pvalues.shape[0] == sample_data.shape[1]  # num of predictors + intercept
+    
+    print(f"Coeff: {model.get_coefficients()}")
+    print("P-Values:", pvalues)
+    # In a perfect linear fit, all relevant predictors should have small p-values
+    assert np.any(pvalues < 0.05)  # Some should be significant
+
+
+
+def test_pvalues_on_noisy_data(noisy_data):
+    model = MLRWrapper(noisy_data, "y")
+    model.fit()
+    pvalues = model.get_PValues()
+
+    assert isinstance(pvalues, np.ndarray)
+    assert pvalues.shape[0] == noisy_data.shape[1]  # predictors + intercept
+    
+    # Not all p-values should be very small; at least some might be > 0.05
+    assert np.any(pvalues > 0.05)
+    print("Noisy P-Values:", pvalues)
+
+
+def test_pvalues_before_fit_raises(sample_data):
+    model = MLRWrapper(sample_data, "y")
+    with pytest.raises(ValueError, match="Model not fit yet"):
+        model.get_PValues()
