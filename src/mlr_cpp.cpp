@@ -1,5 +1,6 @@
 #include <iostream>
 #include <Eigen/Dense>
+#include <boost/math/distributions/students_t.hpp>
 #include "mlr.hpp"
 
 using Eigen::FullPivLU;
@@ -146,4 +147,24 @@ VectorXd MLR::getTStatistics() const
     // Used to test H0: B_i = 0 (null hypothesis).
     VectorXd t_stats = coeffs.array() / se.array();
     return t_stats;
+}
+
+VectorXd MLR::getPValues() const
+{
+    VectorXd t_stats = getTStatistics();
+    int n = X_aug.rows();
+    int p = X_aug.cols(); // includes intercept
+    int df = n - p;       // degress of freedom
+
+    boost::math::students_t dist(df);
+    VectorXd p_values(t_stats.size());
+
+    for (int i = 0; i < t_stats.size(); ++i)
+    {
+        double t = std::abs(t_stats(i));
+        double p_val = 2 * (1 - boost::math::cdf(dist, t)); // 1 - boost::math::cdf(dist, t)
+        p_values(i) = p_val;
+    }
+
+    return p_values;
 }

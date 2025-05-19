@@ -30,5 +30,6 @@ PYBIND11_MODULE(mlr_cpp, m)
         .def("getMAE", &MLR::getMAE, "Get Mean absolute error")
         .def("getMSE", &MLR::getMSE, "Get Mean Squared Error")
         .def("Ftest", &MLR::Ftest, "FTest for model significance")
-        .def("getTStatistics", &MLR::getTStatistics, "Get t statistics of regressors");
+        .def("getTStatistics", &MLR::getTStatistics, "Get t statistics of regressors")
+        .def("getPValues", &MLR::getPValues, "Get PValues of the regressor's signifiance");
 }

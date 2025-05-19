@@ -143,3 +143,7 @@ class MLRWrapper:
     @requires_fit
     def get_TStatistics(self) -> np.float64:
         return self.model.getTStatistics().reshape(-1,1) #return shape (m,1)
+    
+    @requires_fit
+    def get_PValues(self) -> np.ndarray:
+        return self.model.getPValues().reshape(-1,1)
