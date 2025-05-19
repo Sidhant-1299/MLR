@@ -1,4 +1,3 @@
-import array
 from MLR.mlr_wrapper import MLRWrapper
 import pytest
 import pandas as pd
@@ -47,7 +46,7 @@ def sample_data_2():
     x1 = np.array([1,2,3,4, 5])
     x2 = np.array([3,4,1,2,-1])
     x3 = np.array([2,3,5,7,4])
-    y = 1 + x1 + 2*x2 + 0.0021*x3
+    y = 1 + x1 + 2*x2 - 0.0021*x3
     return pd.DataFrame({'x1':x1, 'x2':x2, "x3":x3, 'y':y})
 
 
@@ -73,7 +72,7 @@ def test_equation_with_small_regressor(sample_data_2):
     model = MLRWrapper(sample_data_2, 'y')
     model.fit()
     eqn = model.get_eqn()
-    # print(eqn)
+    print(eqn)
     assert isinstance(eqn ,str)
 
 def test_residuals_shapes(sample_data):

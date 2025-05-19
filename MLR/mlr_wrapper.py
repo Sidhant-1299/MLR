@@ -79,7 +79,7 @@ class MLRWrapper:
     @requires_fit
     def get_coefficients(self) -> np.ndarray:
         """
-            Get the summary of our model
+            Get the coefficients of our model
         """
         return self.model.getCoefficients()
     
@@ -97,17 +97,31 @@ class MLRWrapper:
     #make sure of the + sign
     #remove beta if value is close to 0.0
     @requires_fit
-    def get_eqn(self, rounded:bool = True, atol:int = 1e-8, decimals:int = 2 ) -> str:
+    def get_eqn(self, rounded:bool = True, atol:int = 1e-8, decimals:int = 4 ) -> str:
         """
-            returns the evaluation and summary of the model
+            returns the eqn of the model
             does round up the value with absolute tolerance 1e-8
         """
-        coeffs = self.get_coefficients().reshape(-1,1)
+        coeffs = self.get_coefficients().reshape(-1, 1)
         if rounded:
-            coeffs = self.get_rounded_with_tolerance_coeffs(coeffs=coeffs, atol = atol, decimals= decimals)
-        eqn = f"{self.target} = {coeffs[0,0]} + {''.join([f"{coeff} * {predictor} {'+' if coeff != coeffs[-1,0] else ''}" for (coeff,predictor) in zip(coeffs[1:,0], self.predictors)])}"
+            coeffs = self.get_rounded_with_tolerance_coeffs(coeffs=coeffs, atol=atol, decimals=decimals)
+
+        terms = []
+
+        # Add intercept if not zero
+        intercept = coeffs[0, 0]
+        if abs(intercept) > atol:
+            terms.append(f"{intercept}")
+
+        # Add each term
+        for coeff, predictor in zip(coeffs[1:, 0], self.predictors):
+            sign = "+" if coeff >= 0 else "-"
+            coeff_abs = abs(coeff)
+            terms.append(f"{sign} {coeff_abs} * {predictor}")
+
+        eqn = f"{self.target} = {' '.join(terms)}"
         return eqn
-    
+        
     @requires_fit
     def get_residuals(self) -> np.ndarray:
         return self.model.getResiduals()
@@ -139,7 +153,7 @@ class MLRWrapper:
     @requires_fit
     def get_ftest(self) -> np.float64:
         return self.model.Ftest()
-    
+
     @requires_fit
     def get_TStatistics(self) -> np.float64:
         return self.model.getTStatistics().reshape(-1,1) #return shape (m,1)
@@ -147,3 +161,11 @@ class MLRWrapper:
     @requires_fit
     def get_PValues(self) -> np.ndarray:
         return self.model.getPValues().reshape(-1,1)
+    
+    @requires_fit
+    def get_model_summary(self):
+        """
+        Return the model eqn 
+        and a dataframe containing the summary of the model
+        """
+        pass
