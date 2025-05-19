@@ -163,9 +163,19 @@ class MLRWrapper:
         return self.model.getPValues().reshape(-1,1)
     
     @requires_fit
-    def get_model_summary(self):
+    def get_model_summary(self, tstats = False):
         """
         Return the model eqn 
         and a dataframe containing the summary of the model
+        Optionally return the t statistics of the predictors
         """
-        pass
+        model_eqn = self.get_eqn()
+
+        #df for each predictors (coeff and p values)
+        coeffs = self.get_coefficients().flatten()
+        p_vals = self.get_PValues().flatten()
+        t_stats = self.get_TStatistics().flatten()
+        predictor_summary = {'coeffs':coeffs, 'P Value':p_vals, 'T Statistic': t_stats} if tstats else {'coeffs':coeffs, 'P Value':p_vals}
+        predictor_summary = pd.DataFrame(predictor_summary, index=(['b0'] + self.predictors))
+
+        return predictor_summary

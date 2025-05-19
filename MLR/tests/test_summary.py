@@ -269,3 +269,32 @@ def test_pvalues_before_fit_raises(sample_data):
     model = MLRWrapper(sample_data, "y")
     with pytest.raises(ValueError, match="Model not fit yet"):
         model.get_PValues()
+
+
+def test_get_model_summary(sample_data):
+
+    model = MLRWrapper(sample_data, target_col='y')
+    model.fit()
+
+    # Test without tstats
+    summary = model.get_model_summary()
+    assert isinstance(summary, pd.DataFrame)
+    assert list(summary.columns) == ['coeffs', 'P Value']
+    assert list(summary.index) == ['b0','x1', 'x2']
+    assert isinstance(model.get_eqn(), str)
+    assert model.get_eqn().strip() != ""
+
+
+def test_get_model_summary_with_t_stats(sample_data):
+
+    model = MLRWrapper(sample_data, target_col='y')
+    model.fit()
+
+    # Test without tstats
+    summary = model.get_model_summary(tstats=True)
+    assert isinstance(summary, pd.DataFrame)
+    assert list(summary.columns) == ['coeffs', 'P Value',"T Statistic"]
+    assert list(summary.index) == ['b0','x1', 'x2']
+    assert isinstance(model.get_eqn(), str)
+    assert model.get_eqn().strip() != ""
+    assert not summary['T Statistic'].isnull().any()
