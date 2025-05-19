@@ -133,10 +133,12 @@ VectorXd MLR::getTStatistics() const
     // Standard errors = sqrt(MSE * diag(X^T X)^-1)
     // .diagonal() returns the values of the main diagonal
     VectorXd se = XTX_inv.diagonal(); // returns a vector of shape p x 1
-    for (int i = 0; i < se.size(); ++i)
-    {
-        se(i) = std::sqrt(mse * se(i));
-    }
+    // for (int i = 0; i < se.size(); ++i)
+    // {
+    //     se(i) = std::sqrt(mse * se(i));
+    // }
+
+    se = (mse * se).array().sqrt();
 
     // Compute t-statistics for each coefficient:
     // t_i = B_i / SE(B_i)
