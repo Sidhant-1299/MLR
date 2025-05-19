@@ -1,6 +1,7 @@
 import pandas as pd
 from MLR.core import mlr_cpp
 import numpy as np
+from typing import Tuple
 
 class MLRWrapper:
     """
@@ -163,19 +164,38 @@ class MLRWrapper:
         return self.model.getPValues().reshape(-1,1)
     
     @requires_fit
-    def get_model_summary(self, tstats = False):
+    def get_predictor_summary(self,tstats:bool = False) -> pd.DataFrame:
+        """
+            Returns the summary of the predictors including thier coeffs, p values and optionally t statistic
+        """
+        coeffs = self.get_coefficients().flatten()
+        p_vals = self.get_PValues().flatten()
+        t_stats = self.get_TStatistics().flatten()
+        predictor_summary = {'Coeffs':coeffs, 'P Value':p_vals, 'T Statistic': t_stats} if tstats else {'coeffs':coeffs, 'P Value':p_vals}
+        predictor_summary = pd.DataFrame(predictor_summary, index=(['b0'] + self.predictors))
+
+        return predictor_summary
+    
+
+    def get_model_tests(self) -> pd.DataFrame:
+        """
+            Returns a dataframe containing the model tests
+        """
+        test_results = {"Adjusted Rsquared":self.get_AdjustedR2(), "Rsquared": self.get_R2(), "Mean Absolute Error": self.get_MAE(),
+                        "Mean Squared Error":self.get_MSE(), "F Test": self.get_ftest(), "RSS":self.get_RSS(), "TSS":self.get_TSS(),
+                        }
+        return pd.DataFrame(test_results, index=['Values'])
+
+
+    @requires_fit
+    def get_model_summary(self, tstats = False)-> Tuple[str,pd.DataFrame, pd.DataFrame]:
         """
         Return the model eqn 
         and a dataframe containing the summary of the model
         Optionally return the t statistics of the predictors
         """
         model_eqn = self.get_eqn()
+        predictor_summary = self.get_predictor_summary(tstats=tstats)
+        model_tests = self.get_model_tests()
+        return (model_eqn, predictor_summary, model_tests)
 
-        #df for each predictors (coeff and p values)
-        coeffs = self.get_coefficients().flatten()
-        p_vals = self.get_PValues().flatten()
-        t_stats = self.get_TStatistics().flatten()
-        predictor_summary = {'coeffs':coeffs, 'P Value':p_vals, 'T Statistic': t_stats} if tstats else {'coeffs':coeffs, 'P Value':p_vals}
-        predictor_summary = pd.DataFrame(predictor_summary, index=(['b0'] + self.predictors))
-
-        return predictor_summary

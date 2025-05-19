@@ -12,6 +12,15 @@ def sample_data():
     })
 
 @pytest.fixture
+def sample_data_large():
+    return pd.DataFrame({
+        "x1": [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
+        "x2": [5, 6, 0, 8, 3, 4, 5, 1, 2, 6],
+        "y":  [14, 17, 6, 23, 14, 17, 20, 13, 12, 21]
+    })
+
+
+@pytest.fixture
 def no_intercept_data():
     return pd.DataFrame({
         "x1": [1, 2, 3, 4],
@@ -271,13 +280,13 @@ def test_pvalues_before_fit_raises(sample_data):
         model.get_PValues()
 
 
-def test_get_model_summary(sample_data):
+def test_get_predictor_summary(sample_data):
 
     model = MLRWrapper(sample_data, target_col='y')
     model.fit()
 
     # Test without tstats
-    summary = model.get_model_summary()
+    summary = model.get_predictor_summary()
     assert isinstance(summary, pd.DataFrame)
     assert list(summary.columns) == ['coeffs', 'P Value']
     assert list(summary.index) == ['b0','x1', 'x2']
@@ -285,16 +294,72 @@ def test_get_model_summary(sample_data):
     assert model.get_eqn().strip() != ""
 
 
-def test_get_model_summary_with_t_stats(sample_data):
+def test_get_predictor_summary_with_t_stats(sample_data):
 
     model = MLRWrapper(sample_data, target_col='y')
     model.fit()
 
     # Test without tstats
-    summary = model.get_model_summary(tstats=True)
+    summary = model.get_predictor_summary(tstats=True)
     assert isinstance(summary, pd.DataFrame)
-    assert list(summary.columns) == ['coeffs', 'P Value',"T Statistic"]
+    assert list(summary.columns) == ['Coeffs', 'P Value',"T Statistic"]
     assert list(summary.index) == ['b0','x1', 'x2']
     assert isinstance(model.get_eqn(), str)
     assert model.get_eqn().strip() != ""
     assert not summary['T Statistic'].isnull().any()
+
+
+
+def test_get_model_tests(sample_data_large):
+    #large dataset to prevent overfitting
+    model = MLRWrapper(sample_data_large, target_col='y')
+    model.fit()
+
+    test_df = model.get_model_tests()
+
+    # Check it's a DataFrame with correct index and columns
+    assert isinstance(test_df, pd.DataFrame)
+    assert list(test_df.index) == ['Values']
+
+    expected_columns = [
+        "Adjusted Rsquared", "Rsquared", "Mean Absolute Error",
+        "Mean Squared Error", "F Test", "RSS", "TSS",
+    ]
+    print()
+    print(f"Resiudals: {model.get_residuals()}")
+    print(test_df)
+    assert all(col in test_df.columns for col in expected_columns)
+
+    # Check that values are floats and finite
+    for col in expected_columns:
+        val = test_df.loc['Values', col]
+        assert isinstance(val, float)
+        assert pd.notna(val)
+        assert not pd.isna(val)
+        assert abs(val) < 1e10 
+
+
+def test_model_summary_structure(sample_data_large):
+    model = MLRWrapper(sample_data_large, 'y')
+    model.fit()
+    model_eqn, predictor_df, test_df = model.get_model_summary(tstats=True)
+
+    # Check types
+    assert isinstance(model_eqn, str)
+    assert isinstance(predictor_df, pd.DataFrame)
+    assert isinstance(test_df, pd.DataFrame)
+
+    # Check that key stats exist
+    assert "Rsquared" in test_df.columns
+    assert "Mean Absolute Error" in test_df.columns
+    assert "F Test" in test_df.columns
+
+    # Check that predictors are present
+    assert predictor_df.shape[0] == 3  # intercept + 2 predictors
+    assert "Coeffs" in predictor_df.columns
+    assert "T Statistic" in predictor_df.columns
+    assert "P Value" in predictor_df.columns
+
+    # Equation sanity check
+    assert "y = " in model_eqn
+    assert "x1" in model_eqn and "x2" in model_eqn
