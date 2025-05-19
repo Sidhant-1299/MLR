@@ -74,8 +74,8 @@ def test_get_RSS_and_TSS_after_fit(sample_data):
     rss = model.get_RSS()
     tss = model.get_TSS()
     # RSS should be >= 0, same for TSS
-    assert isinstance(rss, float) or isinstance(rss, np.float64) 
-    assert isinstance(tss, float) or isinstance(tss, np.float64)
+    assert isinstance(rss, (float,np.float64)) 
+    assert isinstance(tss, (float,np.float64))
     assert rss >= 0
     assert tss >= 0
 
@@ -102,7 +102,7 @@ def test_r_squared(sample_data):
     r2 = model.get_R2()
     # print(r2)
     # In this case, data is perfectly linear => R^2 should be ~1.0
-    assert isinstance(r2, float) or isinstance(r2, np.float64)
+    assert isinstance(r2, (float, np.float64))
     assert np.isclose(r2, 1.0, atol=1e-10)
 
 
@@ -153,3 +153,5 @@ def test_mae_on_noisy_data(noisy_data):
     mae = model.get_MAE()
     assert isinstance(mae, (float, np.float64))
     assert mae > 0  # Not zero due to noise
+
+    

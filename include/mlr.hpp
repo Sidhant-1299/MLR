@@ -24,4 +24,5 @@ public:
     double getMSE() const;
     double getMAE() const;
     double Ftest() const;
+    Eigen::MatrixXd getTStaistics() const;
 };

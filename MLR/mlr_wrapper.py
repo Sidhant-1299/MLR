@@ -133,3 +133,10 @@ class MLRWrapper:
     def get_MAE(self) -> np.float64:
         return self.model.getMAE()
     
+    @requires_fit
+    def get_ftest(self) -> np.float64:
+        return self.model.Ftest()
+    
+    @requires_fit
+    def get_TStatitics(self) -> np.float64:
+        return self.model.getTStatistics()
