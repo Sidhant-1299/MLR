@@ -1,5 +1,5 @@
 import pandas as pd
-from MLR.core import mlr_cpp
+import mlr_cpp
 import numpy as np
 from typing import Tuple
 
