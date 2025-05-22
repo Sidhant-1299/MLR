@@ -1,1 +1,2 @@
 recursive-include external/eigen-3.4.0 *
+recursive-include external/eigen-3.4.0/Eigen *

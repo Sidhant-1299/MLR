@@ -10,6 +10,8 @@ ext_modules = [
             "include/",
             "external/eigen-3.4.0",
             "external/boost_1_88_0",
+            "external",
+            "external/eigen-3.4.0/Eigen",
             pybind11.get_include(),
             pybind11.get_include(user=True),
         ],
