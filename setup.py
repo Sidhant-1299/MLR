@@ -7,11 +7,11 @@ ext_modules = [
         'mlr_cpp',
         sources=['src/mlr_cpp.cpp', 'src/bindings.cpp'],
         include_dirs=[
-            pybind11.get_include(),
-            pybind11.get_include(user=True),
             "include/",
             "external/eigen-3.4.0",
-            "external/boost_1_88_0"
+            "external/boost_1_88_0",
+            pybind11.get_include(),
+            pybind11.get_include(user=True),
         ],
         language='c++',
         extra_compile_args=['-std=c++20']
