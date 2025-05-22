@@ -11,10 +11,10 @@ dependencies = [
     "pandas >= 2.2.3",
     "pybind11 == 2.13.6",
 ]
-readme = "README.md"
+readme = {file = "README.md", content-type = "text/markdown"}
 license = "MIT"
 authors = [
-    {name = "Sidhant Raj Khati"}
+    {name = "Sidhant Raj Khati",email = "sidhant.raj.khati@gmail.com"}
 ]
 keywords = ["Machine Learning", "Linear Regression", "Multiple Linear Regression", "C++", "Python", "Python3"]
 classifiers = [
@@ -27,3 +27,10 @@ classifiers = [
 
 [project.urls]
 Repository = "https://github.com/Sidhant-1299/MLR.git"
+
+
+[tool.cibuildwheel]
+build = "cp39-* cp310-* cp311-* cp312-*"
+skip = "pp*"
+before-all = "uname -a"
+environment = { CXXFLAGS = "-std=c++20" }

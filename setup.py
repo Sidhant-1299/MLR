@@ -1,27 +1,22 @@
-from setuptools import find_packages, setup, Extension
-import pybind11
+from setuptools import setup, Extension, find_packages
 from setuptools.command.build_ext import build_ext
-import os
-
-
-here = os.path.abspath(os.path.dirname(__file__))
+import pybind11
 
 ext_modules = [
     Extension(
         'mlr_cpp',
         sources=['src/mlr_cpp.cpp', 'src/bindings.cpp'],
         include_dirs=[
-            pybind11.get_include(),                   # Pybind11 headers
-            pybind11.get_include(user=True),         # For user install cases
-            "/Users/macbookpro/Desktop/MachineLearning/MLR/include/",
-            "/Users/macbookpro/Desktop/MachineLearning/MLR/external/eigen-3.4.0",
-            "/Users/macbookpro/Desktop/MachineLearning/MLR/external/boost_1_88_0",                       
+            pybind11.get_include(),
+            pybind11.get_include(user=True),
+            "include/",
+            "external/eigen-3.4.0",
+            "external/boost_1_88_0"
         ],
         language='c++',
-        extra_compile_args=['-std=c++23']
+        extra_compile_args=['-std=c++20']
     )
 ]
-
 
 setup(
     name='MLR',
@@ -34,4 +29,3 @@ setup(
     cmdclass={'build_ext': build_ext},
     zip_safe=False,
 )
-
