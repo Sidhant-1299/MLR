@@ -24,6 +24,7 @@ setup(
     ext_modules=ext_modules,
     packages=find_packages(),
     package_dir={'': '.'},
+    include_package_data=True,
     description="A high-performance Multiple Linear Regression model implemented in C++ with a clean Python API via Pybind11 bindings",
     author="Sidhant Raj Khati",
     cmdclass={'build_ext': build_ext},
