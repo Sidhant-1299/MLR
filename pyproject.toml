@@ -28,8 +28,8 @@ classifiers = [
 [project.urls]
 Repository = "https://github.com/Sidhant-1299/MLR.git"
 
-[tool.setuptools.include-package-data]
-MLR = ["/external/eigen-3.4.0/**/*"]
+[tool.setuptools]
+include-package-data = true
 
 [tool.cibuildwheel]
 build = "cp39-* cp310-* cp311-* cp312-*"
