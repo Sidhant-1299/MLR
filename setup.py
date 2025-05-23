@@ -6,7 +6,7 @@ import sys
 
 # Try to detect if we're building in like GitHub Actions
 IS_CI = os.environ.get("CI", "false").lower() == "true"
-is_windows = sys.platform == ("win32" or "win64")
+is_windows = sys.platform in ("win32","win64")
 
 
 # Use external/ Eigen and Boost by default for sdist
