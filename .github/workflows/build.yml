@@ -24,11 +24,17 @@ jobs:
 
       - name: Install cibuildwheel and twine
         run: |
-          python -m pip install --upgrade pip
+          python -m pip install --upgrade pip setuptools wheel
           pip install cibuildwheel twine
 
-      - name: Build wheels
-        run: cibuildwheel --output-dir wheelhouse
+      - name: Build wheels (verbose)
+        env:
+          CIBW_BUILD_VERBOSITY: 2 # Increase cibuildwheel verbosity
+          CIBW_SKIP: "pp* cp27-* cp38-* cp39-* cp310-* cp311-*" # Example to skip if needed (optional)
+          CIBW_LOG_LEVEL: DEBUG # More detailed logging (if supported)
+        run: |
+          set -x                     # Shell debug mode ON (for *nix runners)
+          cibuildwheel --output-dir wheelhouse
 
       - name: Publish wheels to PyPI
         if: github.event_name == 'push' && startsWith(github.ref, 'refs/tags/v')
