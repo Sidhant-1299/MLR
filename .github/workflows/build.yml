@@ -34,10 +34,10 @@ jobs:
           brew update
           brew install eigen boost
 
-      - name: Install dependencies (Eigen, Boost) on Windows
-        if: matrix.os == 'windows-latest'
-        run: |
-          choco install eigen3 boost-msvc -y
+      # - name: Install dependencies (Eigen, Boost) on Windows
+      #   if: matrix.os == 'windows-latest'
+      #   run: |
+      #     choco install eigen3 boost-msvc -y
 
       - name: Install cibuildwheel and twine
         run: |
