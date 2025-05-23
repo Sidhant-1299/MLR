@@ -8,18 +8,17 @@ import sys
 IS_CI = os.environ.get("CI", "false").lower() == "true"
 is_windows = sys.platform in ("win32","win64")
 
-#point to system wide eigen and boost for CI
-if IS_CI and not is_windows:
-    if sys.platform == "darwin":
-        boost_path = "/opt/homebrew/include"
-        eigen_path = "/opt/homebrew/include/eigen3"
-    else:
-        # fallback for other systems (if any)
-        boost_path = "/usr/include"
-        eigen_path = "/usr/include/eigen3"
+
+if IS_CI and sys.platform == "darwin":
+    boost_path = "/opt/homebrew/include"
+    eigen_path = "/opt/homebrew/include/eigen3"
+elif IS_CI and (not is_windows):
+    boost_path = "/usr/include"
+    eigen_path = "/usr/include/eigen3"
 else:
     eigen_path = os.path.abspath("external/eigen-3.4.0")
     boost_path = os.path.abspath("external/boost_1_88_0")
+
 
 
 class BuildExtWithCheck(build_ext):
