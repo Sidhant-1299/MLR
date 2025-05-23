@@ -27,6 +27,7 @@ setup(
     include_package_data=True,
     description="A high-performance Multiple Linear Regression model implemented in C++ with a clean Python API via Pybind11 bindings",
     author="Sidhant Raj Khati",
+    email="sidhant.raj.khati@gmail.com",
     cmdclass={'build_ext': build_ext},
     zip_safe=False,
 )

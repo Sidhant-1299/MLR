@@ -1,0 +1,6 @@
+# cibuildwheel.toml
+
+[tool.cibuildwheel]
+# Tell cibuildwheel to build wheels for both CPU architectures on macOS
+macos:
+  archs = ["x86_64", "arm64"]

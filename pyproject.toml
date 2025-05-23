@@ -1,9 +1,9 @@
 [build-system]
-requires = ["setuptools >= 77.0.3","pybind11", "wheel"]
+requires = ["setuptools >= 77.0.3","pybind11", "wheel","cibuildwheel"]
 build-backend = "setuptools.build_meta"
 
 [project]
-requires-python = ">=3.10"
+requires-python = ">=3.9"
 version = "1.0.0"
 name = "mlr_cpp"
 description = "A high-performance Multiple Linear Regression model implemented in C++ with a clean Python API via Pybind11 bindings"
@@ -26,13 +26,16 @@ classifiers = [
 ]
 
 [project.urls]
-Repository = "https://github.com/Sidhant-1299/MLR.git"
+Repository = "https://github.com/Sidhant-1299/mlr_cpp.git"
 
 [tool.setuptools]
 include-package-data = true
 
 [tool.cibuildwheel]
-build = "cp39-* cp310-* cp311-* cp312-*"
+build = ["cp39-*", "cp310-*", "cp311-*", "cp312-*"]
 skip = "pp*"
 before-all = "uname -a"
 environment = { CXXFLAGS = "-std=c++20" }
+
+[tool.cibuildwheel.macos]
+archs = ["x86_64", "arm64"]
