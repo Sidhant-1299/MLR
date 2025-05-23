@@ -36,6 +36,7 @@ jobs:
           brew install eigen boost
           sudo mkdir -p /usr/local/include
           sudo ln -s /opt/homebrew/include/eigen3/Eigen /usr/local/include/Eigen || true
+          sudo ln -s /opt/homebrew/include/boost /usr/local/include/boost || true
 
       - name: Install dependencies (Eigen, Boost) on Windows
         if: matrix.os == 'windows-latest'
