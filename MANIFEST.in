@@ -1,2 +1,7 @@
-recursive-include external/eigen-3.4.0 *
 recursive-include external/eigen-3.4.0/Eigen *
+
+include include/mlr.hpp
+
+recursive-include external/boost_1_88_0/boost/math *.hpp
+recursive-include external/boost_1_88_0/boost/math/tools *.hpp
+recursive-include external/boost_1_88_0/boost/math/constants *.hpp
