@@ -7,17 +7,16 @@ import sys
 # Try to detect if we're building in like GitHub Actions
 IS_CI = os.environ.get("CI", "false").lower() == "true"
 
-# Use bundled Eigen and Boost by default
+# Use external/ Eigen and Boost by default for sdist
 default_eigen_path = os.path.abspath("external/eigen-3.4.0")
 default_boost_path = os.path.abspath("external/boost_1_88_0")
 
-# If system-wide Boost/Eigen are preferred in CI, point there
+#point to system wide eigen and boost for CI
 eigen_path = "/usr/include/eigen3" if IS_CI else default_eigen_path
 boost_path = "/usr/include" if IS_CI else default_boost_path
 
 class BuildExtWithCheck(build_ext):
     def build_extensions(self):
-        # Add include paths
         for ext in self.extensions:
             ext.include_dirs.append(eigen_path)
             ext.include_dirs.append(boost_path)

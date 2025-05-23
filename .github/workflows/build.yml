@@ -45,7 +45,7 @@ jobs:
           pip install cibuildwheel twine
 
       - name: Build wheels
-        run: cibuildwheel --output-dir wheelhouse --verbose
+        run: cibuildwheel --output-dir wheelhouse
 
       - name: Publish wheels to PyPI
         if: github.event_name == 'push' && startsWith(github.ref, 'refs/tags/v')
