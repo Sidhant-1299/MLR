@@ -1,20 +1,32 @@
 from setuptools import setup, Extension, find_packages
 from setuptools.command.build_ext import build_ext
-import pybind11
+from pybind11.setup_helpers import Pybind11Extension
+# ext_modules = [
+#     Extension(
+#         'mlr_cpp',
+#         sources=['src/mlr_cpp.cpp', 'src/bindings.cpp'],
+#         include_dirs=[
+#             "include",
+#             "external/eigen-3.4.0",
+#             "external/",
+#             pybind11.get_include(),
+#             pybind11.get_include(user=True),
+#         ],
+#         language='c++',
+#         extra_compile_args=['-std=c++20']
+#     )
+# ]
+
 
 ext_modules = [
-    Extension(
+    Pybind11Extension(
         'mlr_cpp',
-        sources=['src/mlr_cpp.cpp', 'src/bindings.cpp'],
-        include_dirs=[
+        sources = ['src/mlr_cpp.cpp','src/bindings.cpp'],
+        include_dirs = [
             "include",
             "external/eigen-3.4.0",
-            "external/boost_1_88_0",
-            pybind11.get_include(),
-            pybind11.get_include(user=True),
-        ],
-        language='c++',
-        extra_compile_args=['-std=c++20']
+            "external/boost_1_88_0"
+        ]
     )
 ]
 
