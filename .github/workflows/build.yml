@@ -22,22 +22,24 @@ jobs:
         with:
           python-version: ${{ matrix.python-version }}
 
-      - name: Install dependencies (Eigen, Boost)
+      - name: Install dependencies (Eigen, Boost) on Ubuntu
         if: matrix.os == 'ubuntu-22.04'
         run: |
           sudo apt-get update
           sudo apt-get install -y libeigen3-dev libboost-all-dev
+          sudo ln -s /usr/include/eigen3/Eigen /usr/include/Eigen || true
 
       - name: Install dependencies (Eigen, Boost) on macOS
         if: matrix.os == 'macos-latest'
         run: |
           brew update
           brew install eigen boost
+          sudo ln -s /opt/homebrew/include/eigen3/Eigen /usr/local/include/Eigen || true
 
-      # - name: Install dependencies (Eigen, Boost) on Windows
-      #   if: matrix.os == 'windows-latest'
-      #   run: |
-      #     choco install eigen3 boost-msvc -y
+      - name: Install dependencies (Eigen, Boost) on Windows
+        if: matrix.os == 'windows-latest'
+        run: |
+          echo "No Chocolatey package for Eigen/Boost found, using fallback."
 
       - name: Install cibuildwheel and twine
         run: |
