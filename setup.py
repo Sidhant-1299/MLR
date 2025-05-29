@@ -5,8 +5,10 @@ import os
 import sys
 
 # Try to detect if we're building in like GitHub Actions
-IS_CI = os.environ.get("CI").lower() == "true"
+IS_CI = os.environ.get("CI","false").lower() == "true" #False if None
 is_windows = sys.platform in ("win32","win64")
+
+compiler_warning_flag = '/W0' if is_windows else "-w" #suppress compiler warnings
 
 eigen_path = os.path.abspath("external/eigen-3.4.0")
 boost_path = os.path.abspath("external/boost_1_88_0")
@@ -20,21 +22,11 @@ if IS_CI :
         eigen_path = "/usr/include/eigen3"
 
 
-def log_build_system():
-    """
-        class for logging the build process
-    """
-    print("==== BuildExtWithCheck: Starting extension build ====")
-    print(f"Detected platform: {sys.platform}")
-    print(f"CI Environment: {IS_CI}")
-    print(f"Using Eigen path: {eigen_path}")
-    print(f"Using Boost path: {boost_path}")
-    print(f"Using Pybind11 includes: {pybind11.get_include()}, {pybind11.get_include(user=True)}")
+
 
 class BuildExtensions(build_ext):
-    #logging statements
-    log_build_system()
     def build_extensions(self):
+        # log_build_system(self)
         for ext in self.extensions:
             print(f"self.extensions: {self.extensions}")
             ext.include_dirs.append(eigen_path)
@@ -52,7 +44,7 @@ ext_modules = [
             "include",  
         ],
         language='c++',
-        extra_compile_args=['-std=c++20']
+        extra_compile_args=['-std=c++20',compiler_warning_flag]
     )
 ]
 
