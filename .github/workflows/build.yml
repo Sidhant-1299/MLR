@@ -55,8 +55,8 @@ jobs:
           # Platform-specific build settings
           CIBW_BEFORE_BUILD_LINUX: "true" # No-op (symlinks already created)
           CIBW_BEFORE_BUILD_MACOS: "true" # No-op (symlinks already created)
-          CIBW_ENVIRONMENT: "EIGEN_INCLUDE_PATH=/usr/include/eigen3 BOOST_INCLUDE_PATH=/usr/include" # Linux
-          CIBW_ENVIRONMENT_MACOS: "EIGEN_INCLUDE_PATH=/opt/homebrew/include/eigen3 BOOST_INCLUDE_PATH=/opt/homebrew/include" # macOS
+          CIBW_ENVIRONMENT: "EIGEN_INCLUDE_PATH=/usr/include/eigen3/Eigen BOOST_INCLUDE_PATH=/usr/include" # Linux
+          CIBW_ENVIRONMENT_MACOS: "EIGEN_INCLUDE_PATH=/opt/homebrew/include/eigen3/Eigen BOOST_INCLUDE_PATH=/opt/homebrew/include" # macOS
         run: |
           cibuildwheel --output-dir wheelhouse
 
