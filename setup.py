@@ -6,8 +6,9 @@ import sys
 
 # Try to detect if we're building in like GitHub Actions
 IS_CI = os.environ.get("CI", "false").lower() == "true"
-is_windows = sys.platform in ("win32","win64")
+is_windows = sys.platform == "win32"
 
+warning_flag = '/W0' if is_windows else '-w'
 
 # Use external/ Eigen and Boost by default for sdist
 default_eigen_path = os.path.abspath("external/eigen-3.4.0")
@@ -15,7 +16,7 @@ default_boost_path = os.path.abspath("external/boost_1_88_0")
 
 #point to system wide eigen and boost for CI
 eigen_path = "/usr/include/eigen3" if (IS_CI and not is_windows) else default_eigen_path
-boost_path = "/usr/include" if (IS_CI and not is_windows) else default_boost_path
+boost_path = "/usr/include/boost" if (IS_CI and not is_windows) else default_boost_path
 
 class BuildExtWithCheck(build_ext):
     def build_extensions(self):
@@ -34,7 +35,7 @@ ext_modules = [
             "include",  
         ],
         language='c++',
-        extra_compile_args=['-std=c++20']
+        extra_compile_args=['-std=c++20',warning_flag]
     )
 ]
 
