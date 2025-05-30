@@ -1,8 +1,5 @@
 name: Build and Publish Wheels for mlr
 
-env:
-  CI: true
-
 on:
   push:
     tags:
@@ -31,19 +28,11 @@ jobs:
           sudo apt-get update
           sudo apt-get install -y libeigen3-dev libboost-all-dev
 
-      - name: Add Symlink to the library ubuntu
-        if: matrix.os == 'ubuntu-latest'
-        run: |
-          sudo ln -s /usr/include/eigen3/Eigen /usr/include/Eigen
-
       - name: Install dependencies (Eigen, Boost) on macOS
         if: matrix.os == 'macos-latest'
         run: |
           brew update
           brew install eigen boost
-          sudo mkdir -p /usr/local/include
-          sudo ln -s /opt/homebrew/include/eigen3/Eigen /usr/local/include/Eigen 
-          sudo ln -s /opt/homebrew/include/boost /usr/local/include/boost
 
       - name: Install dependencies (Eigen, Boost) on Windows
         if: matrix.os == 'windows-latest'
@@ -56,6 +45,16 @@ jobs:
           pip install cibuildwheel twine
 
       - name: Build wheels
+        env:
+          # Run symlink commands just before building wheels
+          CIBW_BEFORE_BUILD: |
+            if [ "${{ matrix.os }}" = "ubuntu-latest" ]; then
+              [ ! -e /usr/include/Eigen ] && sudo ln -s /usr/include/eigen3/Eigen /usr/include/Eigen;
+            elif [ "${{ matrix.os }}" = "macos-latest" ]; then
+              sudo mkdir -p /usr/local/include;
+              [ ! -e /usr/local/include/Eigen ] && sudo ln -s /opt/homebrew/include/eigen3/Eigen /usr/local/include/Eigen;
+              [ ! -e /usr/local/include/boost ] && sudo ln -s /opt/homebrew/include/boost /usr/local/include/boost;
+            fi
         run: cibuildwheel --output-dir wheelhouse
 
       - name: Publish wheels to PyPI
