@@ -13,6 +13,11 @@ jobs:
       matrix:
         os: [ubuntu-latest, macos-latest, windows-latest]
         python-version: ["3.10", "3.11", "3.12"]
+        before_build_cmd: [
+            "[ ! -e /usr/include/Eigen ] && sudo ln -s /usr/include/eigen3/Eigen /usr/include/Eigen", # ubuntu
+            "sudo mkdir -p /usr/local/include && [ ! -e /usr/local/include/Eigen ] && sudo ln -s /opt/homebrew/include/eigen3/Eigen /usr/local/include/Eigen && [ ! -e /usr/local/include/boost ] && sudo ln -s /opt/homebrew/include/boost /usr/local/include/boost", # macos
+            'echo "No symlinks needed on Windows"', # windows
+          ]
 
     steps:
       - uses: actions/checkout@v4
@@ -47,14 +52,7 @@ jobs:
       - name: Build wheels
         env:
           # Run symlink commands just before building wheels
-          CIBW_BEFORE_BUILD: |
-            if [ "${{ matrix.os }}" = "ubuntu-latest" ]; then
-              [ ! -e /usr/include/Eigen ] && sudo ln -s /usr/include/eigen3/Eigen /usr/include/Eigen;
-            elif [ "${{ matrix.os }}" = "macos-latest" ]; then
-              sudo mkdir -p /usr/local/include;
-              [ ! -e /usr/local/include/Eigen ] && sudo ln -s /opt/homebrew/include/eigen3/Eigen /usr/local/include/Eigen;
-              [ ! -e /usr/local/include/boost ] && sudo ln -s /opt/homebrew/include/boost /usr/local/include/boost;
-            fi
+          CIBW_BEFORE_BUILD: ${{ matrix.before_build_cmd }}
         run: cibuildwheel --output-dir wheelhouse
 
       - name: Publish wheels to PyPI
