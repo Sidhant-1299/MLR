@@ -28,9 +28,6 @@ classifiers = [
 [project.urls]
 Repository = "https://github.com/Sidhant-1299/mlr_cpp.git"
 
-[tool.setuptools]
-include-package-data = true
-
 [tool.setuptools.packages]
 find = {}
 
