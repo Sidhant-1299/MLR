@@ -28,9 +28,6 @@ classifiers = [
 [project.urls]
 Repository = "https://github.com/Sidhant-1299/mlr_cpp.git"
 
-[tool.setuptools.packages]
-find = {}
-
 [tool.cibuildwheel]
 build = ["cp39-*", "cp310-*", "cp311-*", "cp312-*"]
 skip = "pp*"
