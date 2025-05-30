@@ -10,22 +10,30 @@ IS_CI = (
     os.environ.get("CIBUILDWHEEL", "0").strip() == "1"
 )
 
-is_windows = sys.platform in ("win32","win64")
+is_windows = sys.platform == "win32"
 
 compiler_warning_flag = '/W0' if is_windows else "-w" #suppress compiler warnings
 
-eigen_path = os.path.abspath("external/eigen-3.4.0")
-boost_path = os.path.abspath("external/boost_1_88_0")
+# eigen_path = os.path.abspath("external/eigen-3.4.0")
+# boost_path = os.path.abspath("external/boost_1_88_0")
 
-if IS_CI :
-    if sys.platform == "darwin":
-        boost_path = "/usr/local/include/Eigen" #symlink path
-        eigen_path = "/usr/local/include/boost"
-    elif sys.platform == 'linux': #not reachable cause my machine is mac
-        eigen_path = "/usr/include/Eigen"
-        boost_path = "/usr/include/boost"
+# if IS_CI :
+#     if sys.platform == "darwin":
+#         boost_path = "/usr/local/include/boost" #symlink path
+#         eigen_path = "/usr/local/include/Eigen"
+#     elif sys.platform == 'linux': #not reachable cause my machine is mac
+#         eigen_path = "/usr/include/Eigen"
+#         boost_path = "/usr/include/"
 
-
+# Replace your path detection with:
+eigen_path = (
+    os.environ.get("EIGEN_INCLUDE_PATH") or 
+    os.path.abspath("external/eigen-3.4.0")
+)
+boost_path = (
+    os.environ.get("BOOST_INCLUDE_PATH") or 
+    os.path.abspath("external/boost_1_88_0")
+)
 
 
 class BuildExtensions(build_ext):
