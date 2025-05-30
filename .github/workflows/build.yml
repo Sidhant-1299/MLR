@@ -34,7 +34,6 @@ jobs:
       - name: Add Symlink to the library ubuntu
         if: matrix.os == 'ubuntu-latest'
         run: |
-          echo "adding symlink to path"
           sudo ln -s /usr/include/eigen3/Eigen /usr/include/Eigen
 
       - name: Install dependencies (Eigen, Boost) on macOS
