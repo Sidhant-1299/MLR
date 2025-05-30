@@ -33,6 +33,15 @@ class BuildExtensions(build_ext):
             ext.include_dirs.append(boost_path)
             ext.include_dirs.append(pybind11.get_include())
             ext.include_dirs.append(pybind11.get_include(user=True))
+            
+        print("Logging build info: ")
+        print("==== BuildExtWithCheck: Starting extension build ====\n")
+        print(f"Detected platform: {sys.platform}\n")
+        print(f"CI Environment: {IS_CI}\n")
+        print(f"Using Eigen path: {eigen_path}\n")
+        print(f"Using Boost path: {boost_path}\n")
+        print(f"Using Pybind11 includes: {pybind11.get_include()}, {pybind11.get_include(user=True)}\n")
+        print("\n=== Extensions ===\n")
         super().build_extensions()
 
 #defines how to compile the C++ code
