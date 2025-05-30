@@ -33,7 +33,10 @@ class BuildExtensions(build_ext):
             ext.include_dirs.append(boost_path)
             ext.include_dirs.append(pybind11.get_include())
             ext.include_dirs.append(pybind11.get_include(user=True))
-            
+
+        print("Env variables: ")
+        for k, v in os.environ.items():
+            print(f"{k} = {v}")
         print("Logging build info: ")
         print("==== BuildExtWithCheck: Starting extension build ====\n")
         print(f"Detected platform: {sys.platform}\n")
