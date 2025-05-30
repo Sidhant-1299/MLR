@@ -19,11 +19,11 @@ boost_path = os.path.abspath("external/boost_1_88_0")
 
 if IS_CI :
     if sys.platform == "darwin":
-        boost_path = "/opt/homebrew/include"
-        eigen_path = "/opt/homebrew/include/eigen3"
+        boost_path = "/usr/local/include/Eigen" #symlink path
+        eigen_path = "/usr/local/include/boost"
     elif sys.platform == 'linux': #not reachable cause my machine is mac
-        boost_path = "/usr/include"
-        eigen_path = "/usr/include/eigen3"
+        eigen_path = "/usr/include/Eigen"
+        boost_path = "/usr/include/boost"
 
 
 
