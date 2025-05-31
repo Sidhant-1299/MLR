@@ -23,8 +23,12 @@ boost_path = os.path.abspath("external/boost_1_88_0")
 # boost_path = "/usr/include/boost" if (IS_CI and not is_windows) else default_boost_path
 
 if IS_CI and not is_windows:
-    eigen_path =  "/usr/include/Eigen"
-    boost_path =  "/usr/include/boost"
+    if sys.platform == 'darwin':
+        eigen_path =  "/usr/include/Eigen"
+        boost_path =  "/usr/include/boost"
+    else:
+        eigen_path = "/usr/include/eigen3"
+        boost_path =  "/usr/include/boost"
 
 
 class BuildExtWithCheck(build_ext):
@@ -34,6 +38,9 @@ class BuildExtWithCheck(build_ext):
             ext.include_dirs.append(boost_path)
             ext.include_dirs.append(pybind11.get_include())
             ext.include_dirs.append(pybind11.get_include(user=True))
+        print("Logging info: ")
+        print(self.ext.include_dirs)
+
         super().build_extensions()
 
 ext_modules = [
