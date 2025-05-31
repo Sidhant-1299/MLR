@@ -38,8 +38,6 @@ class BuildExtWithCheck(build_ext):
             ext.include_dirs.append(boost_path)
             ext.include_dirs.append(pybind11.get_include())
             ext.include_dirs.append(pybind11.get_include(user=True))
-        print("Logging info: ")
-        print(self.ext.include_dirs)
 
         super().build_extensions()
 
