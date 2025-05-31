@@ -18,15 +18,12 @@ warning_flag = '/W0' if is_windows else '-w'
 eigen_path = os.path.abspath("external/eigen-3.4.0")
 boost_path = os.path.abspath("external/boost_1_88_0")
 
-#point to system wide eigen and boost for CI
-# eigen_path = "/usr/include/eigen3" if (IS_CI and not is_windows) else default_eigen_path
-# boost_path = "/usr/include/boost" if (IS_CI and not is_windows) else default_boost_path
 
 if IS_CI and not is_windows:
-    if sys.platform == 'darwin':
+    if sys.platform == 'darwin': #macos
         eigen_path =  "/usr/include/Eigen"
         boost_path =  "/usr/include/boost"
-    else:
+    else: #linux
         eigen_path = "/usr/include/eigen3"
         boost_path =  "/usr/include/boost"
 
@@ -36,6 +33,7 @@ class BuildExtWithCheck(build_ext):
         for ext in self.extensions:
             ext.include_dirs.append(eigen_path)
             ext.include_dirs.append(boost_path)
+            ext.include_dirs.append(f"{eigen_path}/Eigen")
             ext.include_dirs.append(pybind11.get_include())
             ext.include_dirs.append(pybind11.get_include(user=True))
 
