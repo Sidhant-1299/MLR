@@ -5,7 +5,11 @@ import os
 import sys
 
 # Try to detect if we're building in like GitHub Actions
-IS_CI = os.environ.get("CI", "false").lower() == "true"
+IS_CI = (
+    (os.environ.get("CI", "false").strip().lower() == "true") or 
+    (os.environ.get("CIBUILDWHEEL","0").strip() == "1")
+    )
+
 is_windows = sys.platform == "win32"
 
 warning_flag = '/W0' if is_windows else '-w'
