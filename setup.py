@@ -15,12 +15,17 @@ is_windows = sys.platform == "win32"
 warning_flag = '/W0' if is_windows else '-w'
 
 # Use external/ Eigen and Boost by default for sdist
-default_eigen_path = os.path.abspath("external/eigen-3.4.0")
-default_boost_path = os.path.abspath("external/boost_1_88_0")
+eigen_path = os.path.abspath("external/eigen-3.4.0")
+boost_path = os.path.abspath("external/boost_1_88_0")
 
 #point to system wide eigen and boost for CI
-eigen_path = "/usr/include/eigen3" if (IS_CI and not is_windows) else default_eigen_path
-boost_path = "/usr/include/boost" if (IS_CI and not is_windows) else default_boost_path
+# eigen_path = "/usr/include/eigen3" if (IS_CI and not is_windows) else default_eigen_path
+# boost_path = "/usr/include/boost" if (IS_CI and not is_windows) else default_boost_path
+
+if IS_CI and not is_windows:
+    eigen_path =  "/usr/include/Eigen"
+    boost_path =  "/usr/include/boost"
+
 
 class BuildExtWithCheck(build_ext):
     def build_extensions(self):
