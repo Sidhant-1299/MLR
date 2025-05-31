@@ -1,5 +1,5 @@
 name: Build and Publish Wheels
-
+#I'll just try to build them first each one by one
 on:
   push:
     tags:
@@ -11,7 +11,8 @@ jobs:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        os: [ubuntu-22.04, macos-latest, windows-latest]
+        # os: [ubuntu-22.04, macos-latest, windows-latest]
+        os: [macos-latest]
         python-version: ["3.9", "3.10", "3.11", "3.12"]
 
     steps:
@@ -22,12 +23,12 @@ jobs:
         with:
           python-version: ${{ matrix.python-version }}
 
-      - name: Install dependencies (Eigen, Boost) on Ubuntu
-        if: matrix.os == 'ubuntu-22.04'
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y libeigen3-dev libboost-all-dev
-          sudo ln -s /usr/include/eigen3/Eigen /usr/include/Eigen || true
+      # - name: Install dependencies (Eigen, Boost) on Ubuntu
+      #   if: matrix.os == 'ubuntu-22.04'
+      #   run: |
+      #     sudo apt-get update
+      #     sudo apt-get install -y libeigen3-dev libboost-all-dev
+      #     sudo ln -s /usr/include/eigen3/Eigen /usr/include/Eigen || true
 
       - name: Install dependencies (Eigen, Boost) on macOS
         if: matrix.os == 'macos-latest'
@@ -38,23 +39,24 @@ jobs:
           sudo ln -s /opt/homebrew/include/eigen3/Eigen /usr/local/include/Eigen || true
           sudo ln -s /opt/homebrew/include/boost /usr/local/include/boost || true
 
-      - name: Install dependencies (Eigen, Boost) on Windows
-        if: matrix.os == 'windows-latest'
-        run: |
-          echo "Eigen/Boost installation must be manually managed or vendored for Windows builds."
+      # - name: Install dependencies (Eigen, Boost) on Windows
+      #   if: matrix.os == 'windows-latest'
+      #   run: |
+      #     echo "Eigen/Boost installation must be manually managed or vendored for Windows builds."
 
       - name: Install cibuildwheel and twine
         run: |
           python -m pip install --upgrade pip
-          pip install cibuildwheel twine
+          #pip install cibuildwheel twine
+          pip install cubuildwheel
 
       - name: Build wheels
         run: cibuildwheel --output-dir wheelhouse
 
-      - name: Publish wheels to PyPI
-        if: github.event_name == 'push' && startsWith(github.ref, 'refs/tags/v')
-        env:
-          TWINE_USERNAME: __token__
-          TWINE_PASSWORD: ${{ secrets.PYPI_API_TOKEN }}
-        run: |
-          python -m twine upload wheelhouse/*.whl
+      # - name: Publish wheels to PyPI
+      #   if: github.event_name == 'push' && startsWith(github.ref, 'refs/tags/v')
+      #   env:
+      #     TWINE_USERNAME: __token__
+      #     TWINE_PASSWORD: ${{ secrets.PYPI_API_TOKEN }}
+      #   run: |
+      #     python -m twine upload wheelhouse/*.whl
