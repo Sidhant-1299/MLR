@@ -33,9 +33,12 @@ class BuildExtWithCheck(build_ext):
         for ext in self.extensions:
             ext.include_dirs.append(eigen_path)
             ext.include_dirs.append(boost_path)
-            ext.include_dirs.append(f"{eigen_path}/Eigen")
+            # ext.include_dirs.append(f"{eigen_path}/Eigen")
             ext.include_dirs.append(pybind11.get_include())
             ext.include_dirs.append(pybind11.get_include(user=True))
+            print("Include paths:")
+            for path in ext.include_dirs:
+                print("  ", path)
 
         super().build_extensions()
 
