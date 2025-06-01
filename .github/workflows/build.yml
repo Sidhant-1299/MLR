@@ -28,17 +28,18 @@ jobs:
         run: |
           sudo apt-get update
           sudo apt-get install -y libeigen3-dev libboost-all-dev
-          sudo ln -s /usr/include/eigen3/Eigen /usr/include/Eigen || true
+          # sudo ln -s /usr/include/eigen3/Eigen /usr/include/Eigen || true
+          sudo ln -s /usr/include/eigen3/Eigen /usr/include/ || true
 
-      - name: Debugging
-        run: |
-          echo "PWD: " $PWD
-          echo "Listing Eigen"
-          ls /usr/include/Eigen/
-          echo "PATH: "
-          echo $PATH
-          echo "GITHUB PATH: "
-          echo $$GITHUB_PATH
+      # - name: Debugging
+      #   run: |
+      #     echo "PWD: " $PWD
+      #     echo "Listing Eigen"
+      #     ls /usr/include/Eigen/
+      #     echo "PATH: "
+      #     echo $PATH
+      #     echo "GITHUB PATH: "
+      #     echo $$GITHUB_PATH
 
       - name: Install dependencies (Eigen, Boost) on macOS
         if: matrix.os == 'macos-latest'

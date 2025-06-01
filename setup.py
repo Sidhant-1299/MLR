@@ -24,8 +24,8 @@ if IS_CI and not is_windows:
         eigen_path =  "/usr/include/Eigen"
         boost_path =  "/usr/include/boost"
     else: #linux
-        eigen_path = "/usr/include/eigen3"
-        boost_path =  "/usr/include/boost"
+        eigen_path = "/usr/include/"
+        boost_path =  "/usr/include/"
 
 
 class BuildExtWithCheck(build_ext):
