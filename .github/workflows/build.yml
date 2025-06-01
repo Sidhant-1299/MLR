@@ -28,14 +28,13 @@ jobs:
         run: |
           sudo apt-get update
           sudo apt-get install -y libeigen3-dev libboost-all-dev
-          # sudo ln -s /usr/include/eigen3/Eigen /usr/include/Eigen || true
+          sudo ln -s /usr/include/eigen3/Eigen /usr/include/Eigen || true
 
       - name: Debugging
         run: |
           echo "PWD: " $PWD
-          ls /usr/include/eigen3/
           echo "Listing Eigen"
-          ls /usr/include/eigen3/Eigen
+          ls /usr/include/Eigen/
           echo "PATH: "
           echo $PATH
           echo "GITHUB PATH: "
