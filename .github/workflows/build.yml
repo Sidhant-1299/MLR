@@ -41,6 +41,10 @@ jobs:
       #     echo "GITHUB PATH: "
       #     echo $$GITHUB_PATH
 
+      - name: Debugging
+        run: |
+          ls "external/eigen-3.4.0"
+
       - name: Install dependencies (Eigen, Boost) on macOS
         if: matrix.os == 'macos-latest'
         run: |
