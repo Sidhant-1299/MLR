@@ -23,9 +23,14 @@ if IS_CI and not is_windows:
     if sys.platform == 'darwin': #macos
         eigen_path =  "/usr/include/Eigen"
         boost_path =  "/usr/include/boost"
-    else: #linux
-        eigen_path = "/usr/include/"
-        boost_path =  "/usr/include/"
+    # else: #linux
+    #     eigen_path = "/usr/include/"
+    #     boost_path =  "/usr/include/"
+    else:
+        boost_path = "external/boost_1_88_0"
+        eigen_path = "external/eigen-3.4.0"
+
+
 
 
 class BuildExtWithCheck(build_ext):
@@ -47,7 +52,7 @@ ext_modules = [
         'mlr_cpp',
         sources=['src/mlr_cpp.cpp', 'src/bindings.cpp'],
         include_dirs=[
-            "include",  
+            "include",  external/boost_1_88_0
         ],
         language='c++',
         extra_compile_args=['-std=c++20',warning_flag]
