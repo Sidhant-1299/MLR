@@ -52,7 +52,7 @@ ext_modules = [
         'mlr_cpp',
         sources=['src/mlr_cpp.cpp', 'src/bindings.cpp'],
         include_dirs=[
-            "include",  external/boost_1_88_0
+            "include",  
         ],
         language='c++',
         extra_compile_args=['-std=c++20',warning_flag]
