@@ -26,9 +26,9 @@ if IS_CI and not is_windows:
     # else: #linux
     #     eigen_path = "/usr/include/"
     #     boost_path =  "/usr/include/"
-    else:
-        boost_path = "external/boost_1_88_0"
-        eigen_path = "external/eigen-3.4.0"
+    # else:
+    #     boost_path = "external/boost_1_88_0"
+    #     eigen_path = "external/eigen-3.4.0"
 
 
 
