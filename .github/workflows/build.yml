@@ -30,10 +30,16 @@ jobs:
           sudo apt-get install -y libeigen3-dev libboost-all-dev
           # sudo ln -s /usr/include/eigen3/Eigen /usr/include/Eigen || true
 
-      - name: Check if binary exits abd list it
+      - name: Debugging
         run: |
           echo "PWD: " $PWD
-          ls /usr/include/eigen3
+          ls /usr/include/eigen3/
+          echo "Listing Eigen"
+          ls /usr/include/eigen3/Eigen
+          echo "PATH: "
+          echo $PATH
+          echo "GITHUB PATH: "
+          echo $$GITHUB_PATH
 
       - name: Install dependencies (Eigen, Boost) on macOS
         if: matrix.os == 'macos-latest'
