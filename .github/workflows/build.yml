@@ -55,8 +55,8 @@ jobs:
       - name: Build wheels for Windows
         if: matrix.os == 'windows-latest'
         env:
-          CIBW_ENVIRONMENT: >
-            CXXFLAGS="-I$(Get-Location)\external\eigen-3.4.0 -I$(Get-Location)\external\boost_1_88_0"
+          CIBW_ENVIRONMENT_WINDOWS: >
+            CXXFLAGS="/Iexternal\\eigen-3.4.0 /Iexternal\\boost_1_88_0"
         run: |
           cibuildwheel --output-dir wheelhouse
 
