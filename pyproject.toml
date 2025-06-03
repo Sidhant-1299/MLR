@@ -9,8 +9,13 @@ name = "mlr_cpp"
 description = "A high-performance Multiple Linear Regression model implemented in C++ with a clean Python API via Pybind11 bindings"
 dependencies = [
     "pandas >= 2.2.3",
-    "pybind11 == 2.13.6",
+    "pybind11 >= 2.13.6",
 ]
+
+[project.optional-dependencies]
+examples = ["matplotlib", "jupyter", "scikit-learn"] #pip install mlr_cpp[examples]
+dev = ["pytest", "build", "twine"] #pip install mlr_cpp[dev]
+
 readme = {file = "README.md", content-type = "text/markdown"}
 license = "MIT"
 authors = [
