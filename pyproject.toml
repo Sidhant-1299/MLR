@@ -12,9 +12,7 @@ dependencies = [
     "pybind11 >= 2.13.6",
 ]
 
-[project.optional-dependencies]
-examples = ["matplotlib", "jupyter", "scikit-learn"] #pip install mlr_cpp[examples]
-dev = ["pytest", "build", "twine"] #pip install mlr_cpp[dev]
+
 
 readme = {file = "README.md", content-type = "text/markdown"}
 license = "MIT"
@@ -29,6 +27,10 @@ classifiers = [
     "Topic :: Scientific/Engineering :: Mathematics",
     "Intended Audience :: Science/Research"
 ]
+
+[project.optional-dependencies]
+examples = ["matplotlib", "jupyter", "scikit-learn"] #pip install mlr_cpp[examples]
+dev = ["pytest", "build", "twine"] #pip install mlr_cpp[dev]
 
 [project.urls]
 Repository = "https://github.com/Sidhant-1299/mlr_cpp.git"
