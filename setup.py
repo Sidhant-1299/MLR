@@ -12,7 +12,7 @@ IS_CI = (
 
 is_windows = sys.platform == "win32"
 
-warning_flag = '/W0' if is_windows else '-w'
+warning_flag = '/W3' if is_windows else '-w'
 
 # Use external/ Eigen and Boost by default for sdist
 eigen_path = os.path.abspath("external/eigen-3.4.0")
