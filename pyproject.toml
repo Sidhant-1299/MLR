@@ -37,3 +37,5 @@ environment = { CXXFLAGS = "-std=c++20" }
 
 [tool.cibuildwheel.macos]
 archs = ["x86_64", "arm64"]
+
+[tool.cibuildwheel.windows]
