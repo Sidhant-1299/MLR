@@ -11,7 +11,8 @@ jobs:
     runs-on: ${{matrix.os}}
     strategy:
       matrix:
-        os: [macos-latest, windows-latest]
+        # os: [macos-latest, windows-latest]
+        os: [windows-latest]
         python-version: ["3.9", "3.10", "3.11", "3.12"]
 
     steps:
@@ -45,9 +46,16 @@ jobs:
           python -m pip install --upgrade pip
           pip install cibuildwheel twine
 
-      - name: Build wheels
+      - name: Build wheels for mac
+        if: matrix.os == 'macos-latest'
         run: |
           export CXXFLAGS="-I$(pwd)/external/eigen-3.4.0 -I$(pwd)/external/boost_1_88_0"
+          cibuildwheel --output-dir wheelhouse
+
+      - name: Build wheels for Windows
+        if: matrix.os == 'windows-latest'
+        run: |
+          $env:CXXFLAGS="-I$(Get-Location)\external\eigen-3.4.0 -I$(Get-Location)\external\boost_1_88_0"
           cibuildwheel --output-dir wheelhouse
 
       - name: Upload built wheels as artifact
