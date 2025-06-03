@@ -111,13 +111,14 @@ model.get_model_tests()  # Summary DataFrame containing major evaluation metrics
 
 ## 👨‍💻 Author
 
-**Sidhant Raj Khati**  
+### Sidhant Raj Khati
+
+🌐︎ Website: [sidhantkhati.com](https://sidhantkhati.com)\
+💼 LinkedIn: [LinkedIn](https://www.linkedin.com/in/sidhant-raj-khati-728086245/)\
 🔗 GitHub: [Sidhant-1299/mlr_cpp](https://github.com/Sidhant-1299/mlr_cpp)
-🌐︎ Website: [Personal Website](https://sidhantkhati.com)
-💼 [LinkedIn]([https://www.linkedin.com/in/sidhant-raj-khati](https://www.linkedin.com/in/sidhant-raj-khati-728086245/))
 
 
 ## 📄 License
 
-This project is licensed under the **MIT License** – see the [LICENSE](LICENSE) file for details.
+This project is licensed under the **MIT License**
 
