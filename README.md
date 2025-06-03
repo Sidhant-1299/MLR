@@ -93,3 +93,31 @@ print(eqn)                  # Prints the regression equation
 print(predictor_summary)    # DataFrame with coefficients, p-values, and t-statistics
 print(model_tests)          # DataFrame with metrics like R², MAE, MSE, etc.
 ```
+
+### Evaluation Metrics
+
+After fitting the model, `mlr_cpp` provides access to standard evaluation metrics for performance diagnostics:
+
+```python
+model.get_R2()           # Coefficient of Determination (R²)
+model.get_AdjustedR2()   # Adjusted R²
+model.get_MAE()          # Mean Absolute Error
+model.get_MSE()          # Mean Squared Error
+model.get_ftest()        # F-statistic of the regression model
+model.get_TStatistics()  # T-statistics for each predictor
+model.get_PValues()      # P-values corresponding to each predictor
+model.get_model_tests()  # Summary DataFrame containing major evaluation metrics
+```
+
+## 👨‍💻 Author
+
+**Sidhant Raj Khati**  
+🔗 GitHub: [Sidhant-1299/mlr_cpp](https://github.com/Sidhant-1299/mlr_cpp)
+🌐︎ Website: [Personal Website](https://sidhantkhati.com)
+💼 [LinkedIn]([https://www.linkedin.com/in/sidhant-raj-khati](https://www.linkedin.com/in/sidhant-raj-khati-728086245/))
+
+
+## 📄 License
+
+This project is licensed under the **MIT License** – see the [LICENSE](LICENSE) file for details.
+
