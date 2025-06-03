@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 requires-python = ">=3.9"
-version = "1.0.0"
+version = "1.0.1"
 name = "mlr_cpp"
 description = "A high-performance Multiple Linear Regression model implemented in C++ with a clean Python API via Pybind11 bindings"
 dependencies = [
@@ -13,7 +13,7 @@ dependencies = [
 ]
 
 [project.optional-dependencies]
-examples = ["matplotlib", "jupyter", "scikit-learn",'seaborn'] #pip install mlr_cpp[examples]
+examples = ["matplotlib", "jupyter", "scikit-learn"] #pip install mlr_cpp[examples]
 dev = ["pytest", "build", "twine"] #pip install mlr_cpp[dev]
 
 readme = {file = "README.md", content-type = "text/markdown"}
