@@ -38,7 +38,7 @@ class BuildExtWithCheck(build_ext):
 
 ext_modules = [
     Extension(
-        'mlr_cpp',
+        ' "MLR.mlr_cpp"',
         sources=['src/mlr_cpp.cpp', 'src/bindings.cpp'],
         include_dirs=[
             "include",  
