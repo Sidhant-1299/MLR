@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 requires-python = ">=3.9"
-version = "1.0.1"
+version = "1.1.0"
 name = "mlr_cpp"
 description = "A high-performance Multiple Linear Regression model implemented in C++ with a clean Python API via Pybind11 bindings"
 dependencies = [
