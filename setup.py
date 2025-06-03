@@ -52,7 +52,7 @@ ext_modules = [
 
 setup(
     name='mlr_cpp',
-    version='1.0.0',
+    version='1.1.0',
     ext_modules=ext_modules,
     packages=find_packages(),
     package_dir={'': '.'},
