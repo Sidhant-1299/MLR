@@ -45,7 +45,7 @@ ext_modules = [
         ],
         language='c++',
         # extra_compile_args=['-std=c++20',warning_flag]
-        extra_compile_args = ['/std:c++20', warning_flag] if is_windows else ['-std=c++20', warning_flag]
+        extra_compile_args =  ['-std=c++20', warning_flag]
 
     )
 ]
