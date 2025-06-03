@@ -13,7 +13,7 @@ dependencies = [
 ]
 
 [project.optional-dependencies]
-examples = ["matplotlib", "jupyter", "scikit-learn"] #pip install mlr_cpp[examples]
+examples = ["matplotlib", "jupyter", "scikit-learn",'seaborn'] #pip install mlr_cpp[examples]
 dev = ["pytest", "build", "twine"] #pip install mlr_cpp[dev]
 
 readme = {file = "README.md", content-type = "text/markdown"}
