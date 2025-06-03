@@ -58,3 +58,38 @@ pip install mlr_cpp
 pip install mlr_cpp[examples]  # for examples, plotting
 pip install mlr_cpp[dev]       # for development tools
 ```
+
+
+## Example Usage
+
+```python
+import pandas as pd
+from mlr_wrapper import MLRWrapper
+
+df = pd.read_csv("your_data.csv")
+model = MLRWrapper(df, target_col="mpg")
+
+model.fit()
+eqn, predictors, tests = model.get_model_summary(tstats=True)
+
+print(eqn)
+print(predictors)
+print(tests)
+```
+
+### Prediction
+```python
+model.predict(new_df)
+```
+
+### Model Summary
+
+You can retrieve a complete summary of the model including the regression equation, coefficients, p-values, and test metrics:
+
+```python
+eqn, predictor_summary, model_tests = model.get_model_summary(tstats=True)
+
+print(eqn)                  # Prints the regression equation
+print(predictor_summary)    # DataFrame with coefficients, p-values, and t-statistics
+print(model_tests)          # DataFrame with metrics like R², MAE, MSE, etc.
+```
