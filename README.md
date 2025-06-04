@@ -44,6 +44,8 @@ sklearn: 0.987661
 
 ##  Installation
 
+https://pypi.org/project/mlr-cpp/
+
 ```bash
 pip install mlr_cpp
 ```
@@ -110,10 +112,9 @@ model.get_model_tests()  # Summary DataFrame containing major evaluation metrics
 
 ### Sidhant Raj Khati
 
-🔗 GitHub: [Sidhant-1299/mlr_cpp](https://github.com/Sidhant-1299/mlr_cpp)
-🔗 pypi: [pypi](https://pypi.org/project/mlr-cpp/)\
 🌐︎ Website: [sidhantkhati.com](https://sidhantkhati.com)\
 💼 LinkedIn: [LinkedIn](https://www.linkedin.com/in/sidhant-raj-khati-728086245/)\
+🔗 GitHub: [Sidhant-1299/](https://github.com/Sidhant-1299/)
 
 
 ## 📄 License
